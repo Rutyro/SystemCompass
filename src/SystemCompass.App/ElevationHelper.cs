@@ -40,7 +40,12 @@ internal static class ElevationHelper
         {
             entries = changes.Select(change => new { entryId = change.EntryId, enabled = change.Enabled }),
         };
-        await File.WriteAllTextAsync(intentPath, JsonSerializer.Serialize(payload, JsonOptions));
+        using var intentStream = new FileStream(
+            intentPath, FileMode.CreateNew, FileAccess.Write, FileShare.Read);
+        using (var writer = new StreamWriter(intentStream, leaveOpen: true))
+        {
+            await writer.WriteAsync(JsonSerializer.Serialize(payload, JsonOptions));
+        }
 
         try
         {
@@ -83,6 +88,9 @@ internal static class ElevationHelper
         }
         finally
         {
+            // The write handle stays open across the UAC prompt so another
+            // process cannot replace the intent while the helper is starting.
+            intentStream.Dispose();
             TryDelete(intentPath);
             TryDelete(intentPath + ".result.json");
         }

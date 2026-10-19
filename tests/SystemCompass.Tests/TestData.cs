@@ -9,7 +9,8 @@ internal static class TestData
         EntryState state = EntryState.Enabled,
         StartupMechanism mechanism = StartupMechanism.RunKey,
         SignatureInfo? signature = null,
-        string? path = null)
+        string? path = null,
+        bool isProtected = false)
     {
         return new StartupEntry(
             StartupEntryId.Create(mechanism, StartupScope.CurrentUser, "test", name),
@@ -21,7 +22,7 @@ internal static class TestData
             path,
             path,
             signature ?? SignatureInfo.Unknown,
-            new Assessment(EntryCategory.Optional, RiskLevel.Low, "test", "test"),
+            new Assessment(EntryCategory.Optional, RiskLevel.Low, "test", "test", isProtected),
             false);
     }
 }

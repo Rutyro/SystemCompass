@@ -480,13 +480,25 @@ internal static class CliCommands
         return Guard(() =>
         {
             var fullPath = Path.GetFullPath(path);
-            var file = new FileInfo(fullPath);
-            if (!file.Exists)
+            if (!LocalPath.IsLocalFile(fullPath))
             {
-                throw new InvalidOperationException("The intent file does not exist.");
+                throw new InvalidOperationException("The intent file must be on a local drive.");
             }
 
-            if (file.Length > 1_000_000)
+            if (!string.IsNullOrWhiteSpace(dataDir) && !LocalPath.IsLocalFile(Path.GetFullPath(dataDir)))
+            {
+                throw new InvalidOperationException("The data directory must be on a local drive.");
+            }
+
+            if ((File.GetAttributes(fullPath) & FileAttributes.ReparsePoint) != 0)
+            {
+                throw new InvalidOperationException("The intent file must not be a reparse point.");
+            }
+
+            // ReadWrite lets the app keep its write handle open while the UAC
+            // prompt is pending; the app's FileShare.Read blocks other writers.
+            using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            if (stream.Length > 1_000_000)
             {
                 throw new InvalidOperationException("The intent file exceeds the size limit.");
             }
@@ -500,7 +512,8 @@ internal static class CliCommands
                 return 2;
             }
 
-            var intent = JsonSerializer.Deserialize<ChangeIntent>(File.ReadAllText(fullPath), IntentJson)
+            using var reader = new StreamReader(stream);
+            var intent = JsonSerializer.Deserialize<ChangeIntent>(reader.ReadToEnd(), IntentJson)
                 ?? throw new InvalidOperationException("The intent file is empty.");
             if (intent.Entries.Count == 0 || intent.Entries.Count > 100)
             {
@@ -522,9 +535,16 @@ internal static class CliCommands
                 results.Add(new IntentResult(item.EntryId, result.Success, result.Message));
             }
 
-            File.WriteAllText(
-                fullPath + ".result.json",
-                JsonSerializer.Serialize(new IntentResultFile(results), IntentJson));
+            using (var result = new FileStream(
+                       fullPath + ".result.json",
+                       FileMode.CreateNew,
+                       FileAccess.Write,
+                       FileShare.None))
+            {
+                using var writer = new StreamWriter(result);
+                writer.Write(JsonSerializer.Serialize(new IntentResultFile(results), IntentJson));
+            }
+
             return results.All(result => result.Success) ? 0 : 1;
         });
     }
@@ -538,6 +558,7 @@ internal static class CliCommands
         catch (Exception ex) when (ex is InvalidOperationException
             or UnauthorizedAccessException
             or IOException
+            or System.Text.Json.JsonException
             or System.ComponentModel.Win32Exception)
         {
             Console.Error.WriteLine($"error: {ex.Message}");

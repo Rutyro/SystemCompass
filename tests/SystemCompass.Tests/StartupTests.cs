@@ -95,4 +95,15 @@ public sealed class StartupTests
         Assert.AreEqual(first, second);
         Assert.AreNotEqual(first, other);
     }
+
+    [TestMethod]
+    public void NetworkPathsAreNotTreatedAsLocalFiles()
+    {
+        Assert.IsTrue(LocalPath.IsLocalFile(@"C:\Windows\notepad.exe"));
+        Assert.IsTrue(LocalPath.IsLocalFile(@"\\?\C:\Windows\notepad.exe"));
+        Assert.IsFalse(LocalPath.IsLocalFile(@"\\server\share\evil.exe"));
+        Assert.IsFalse(LocalPath.IsLocalFile(@"\\?\UNC\server\share\evil.exe"));
+        Assert.IsFalse(LocalPath.IsLocalFile(@"\\.\pipe\evil"));
+        Assert.IsFalse(LocalPath.IsLocalFile(@"relative\evil.exe"));
+    }
 }

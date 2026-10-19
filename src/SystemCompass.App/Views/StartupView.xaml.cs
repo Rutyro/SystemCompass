@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using SystemCompass.App.ViewModels;
+using SystemCompass.Core.Startup;
 using Xceed.Wpf.Toolkit;
 using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
 
@@ -69,7 +70,7 @@ public partial class StartupView : UserControl
         }
 
         var path = entry.Entry.ResolvedPath;
-        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+        if (!LocalPath.IsLocalFile(path) || !File.Exists(path))
         {
             return;
         }

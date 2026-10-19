@@ -29,6 +29,22 @@ public sealed class ChangeAndTweakTests
     }
 
     [TestMethod]
+    public void ProtectedEntryIsRefusedBeforeProviderWrite()
+    {
+        var entry = TestData.Entry("Protected", isProtected: true);
+        var provider = new FakeStartup(entry);
+        var journal = new InMemoryJournal();
+        var executor = new ChangeExecutor([provider], journal, TimeProvider.System);
+
+        var result = executor.SetState(entry, false);
+
+        Assert.IsFalse(result.Success);
+        Assert.IsTrue(result.Message.Contains("protected", StringComparison.OrdinalIgnoreCase));
+        Assert.AreEqual(EntryState.Enabled, provider.Enumerate()[0].State);
+        Assert.AreEqual(0, journal.ReadAll().Count);
+    }
+
+    [TestMethod]
     public void VerificationFailureIsReportedAndJournaled()
     {
         var entry = TestData.Entry("Stubborn");
@@ -112,6 +128,9 @@ public sealed class ChangeAndTweakTests
         Assert.IsTrue(SecurityDenyList.IsDenied(new RegistrySet(
             "HKLM", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
             "EnableLUA", RegistryValueKindKind.DWord, "0")));
+        Assert.IsTrue(SecurityDenyList.IsDenied(new RegistrySet(
+            "HKLM", "SOFTWARE\\Policies\\Microsoft\\Windows Defender",
+            "SomeFutureSetting", RegistryValueKindKind.DWord, "1")));
         Assert.IsFalse(SecurityDenyList.IsDenied(new TcpGlobal("autotuninglevel", "normal")));
     }
 

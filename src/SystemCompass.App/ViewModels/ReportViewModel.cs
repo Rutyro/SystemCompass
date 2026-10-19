@@ -88,7 +88,8 @@ public sealed partial class ReportViewModel : ObservableObject
             var text = string.IsNullOrWhiteSpace(Notes)
                 ? ReportText
                 : ReportText + Environment.NewLine + Environment.NewLine
-                  + "## Reviewer notes" + Environment.NewLine + Environment.NewLine + Notes;
+                  + "## Reviewer notes" + Environment.NewLine + Environment.NewLine
+                  + _services.Redactor.Redact(Notes);
             File.WriteAllText(dialog.FileName, text);
             StatusMessage = $"Saved redacted report to {dialog.FileName}";
         }

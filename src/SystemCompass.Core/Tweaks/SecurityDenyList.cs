@@ -8,7 +8,7 @@ public static class SecurityDenyList
 {
     private static readonly string[] DeniedKeyFragments =
     [
-        "\\Policies\\Microsoft\\Windows\\Defender",
+        "\\Policies\\Microsoft\\Windows Defender",
         "\\Policies\\Microsoft\\Windows\\DeviceGuard",
         "\\Policies\\Microsoft\\Windows\\WindowsUpdate",
         "\\Control\\DeviceGuard",

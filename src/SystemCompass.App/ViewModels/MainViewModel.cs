@@ -27,7 +27,7 @@ public sealed partial class MainViewModel : ObservableObject
         Timeline = [];
         Dashboard = new DashboardViewModel(services, demo, Navigate);
         Startup = new StartupViewModel(services, demo);
-        ControlCenter = new ControlCenterViewModel(services);
+        ControlCenter = new ControlCenterViewModel(services, demo);
         Journal = new JournalViewModel(services, demo);
         Report = new ReportViewModel(services, demo);
         RefreshExplorer();

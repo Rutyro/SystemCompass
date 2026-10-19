@@ -17,7 +17,7 @@ public sealed class SignatureVerifier
 
     public SignatureInfo Verify(string? path)
     {
-        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+        if (!LocalPath.IsLocalFile(path) || !File.Exists(path))
         {
             return SignatureInfo.Unknown;
         }

@@ -71,6 +71,15 @@ public sealed class ChangeExecutor
     private ChangeResult Apply(StartupEntry entry, bool enabled, string action, EntryState expected)
     {
         var changeId = Guid.NewGuid().ToString("N")[..12];
+        if (entry.IsProtected)
+        {
+            return new ChangeResult(
+                false,
+                changeId,
+                "This entry is protected and cannot be changed.",
+                entry.State);
+        }
+
         var provider = _providers.FirstOrDefault(candidate => candidate.Mechanism == entry.Mechanism);
         if (provider is null)
         {

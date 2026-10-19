@@ -29,13 +29,15 @@ public sealed partial class TweakItemViewModel : ObservableObject
     private TweakStatus _status;
     private bool _selected;
 
-    public TweakItemViewModel(TweakDefinition definition, TweakStatus status)
+    public TweakItemViewModel(TweakDefinition definition, TweakStatus status, bool isReadOnly = false)
     {
         Definition = definition;
         _status = status;
+        IsReadOnly = isReadOnly;
     }
 
     public TweakDefinition Definition { get; }
+    public bool IsReadOnly { get; }
     public TweakStatus Status => _status;
     public string Id => Definition.Id;
     public string Title => Definition.Title;
@@ -65,8 +67,8 @@ public sealed partial class TweakItemViewModel : ObservableObject
         _ => "Not applicable",
     };
 
-    public bool CanApply => _status is TweakStatus.NotApplied or TweakStatus.Partial;
-    public bool CanRevert => _status is TweakStatus.Applied or TweakStatus.Partial;
+    public bool CanApply => !IsReadOnly && (_status is TweakStatus.NotApplied or TweakStatus.Partial);
+    public bool CanRevert => !IsReadOnly && (_status is TweakStatus.Applied or TweakStatus.Partial);
     public System.Windows.Visibility ApplyVisibility =>
         CanApply ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
     public System.Windows.Visibility RevertVisibility =>
@@ -150,11 +152,13 @@ public sealed partial class TweakItemViewModel : ObservableObject
 public sealed partial class ControlCenterViewModel : ObservableObject
 {
     private readonly SystemServices _services;
+    private readonly bool _demo;
     private readonly List<TweakItemViewModel> _all = [];
 
-    public ControlCenterViewModel(SystemServices services)
+    public ControlCenterViewModel(SystemServices services, bool demo)
     {
         _services = services;
+        _demo = demo;
         Tweaks = [];
         Categories = [];
         RiskOptions = ["Low", "Medium", "High"];
@@ -171,6 +175,7 @@ public sealed partial class ControlCenterViewModel : ObservableObject
         Refresh();
     }
 
+    public bool IsDemo => _demo;
     public ObservableCollection<TweakItemViewModel> Tweaks { get; }
     public ObservableCollection<string> Categories { get; }
     public IReadOnlyList<string> StatusOptions { get; }
@@ -219,7 +224,9 @@ public sealed partial class ControlCenterViewModel : ObservableObject
             foreach (var tweak in _services.Catalog.Tweaks)
             {
                 _all.Add(new TweakItemViewModel(
-                    tweak, _services.Tweaks.GetStatus(tweak, Environment.OSVersion.Version.Build)));
+                    tweak,
+                    _services.Tweaks.GetStatus(tweak, Environment.OSVersion.Version.Build),
+                    _demo));
             }
 
             var applied = _all.Count(item => item.Status == TweakStatus.Applied);
@@ -233,7 +240,8 @@ public sealed partial class ControlCenterViewModel : ObservableObject
             CatalogWarning = string.Join(Environment.NewLine, problems);
             ApplyFilter();
             StatusMessage = $"{_all.Count} tweaks · "
-                + $"{_all.Count(item => item.Definition.Evidence == TweakEvidence.MicrosoftDocumented)} documented by Microsoft";
+                + $"{_all.Count(item => item.Definition.Evidence == TweakEvidence.MicrosoftDocumented)} documented by Microsoft"
+                + (_demo ? " · Demo mode: changes are disabled" : string.Empty);
         }
         catch (Exception ex) when (ex is InvalidOperationException
             or UnauthorizedAccessException or IOException
@@ -249,6 +257,11 @@ public sealed partial class ControlCenterViewModel : ObservableObject
 
     public async Task<(bool Success, string Message)> ApplyAsync(TweakItemViewModel item)
     {
+        if (_demo)
+        {
+            return (false, "Demo mode is read-only; no change was made.");
+        }
+
         try
         {
             if (item.Definition.RequiresElevation)
@@ -272,6 +285,11 @@ public sealed partial class ControlCenterViewModel : ObservableObject
 
     public async Task<(bool Success, string Message)> RevertAsync(TweakItemViewModel item)
     {
+        if (_demo)
+        {
+            return (false, "Demo mode is read-only; no change was made.");
+        }
+
         try
         {
             if (item.Definition.RequiresElevation)

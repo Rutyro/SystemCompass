@@ -30,13 +30,13 @@ public sealed class ReportBuilder
 
         foreach (var section in report.Sections)
         {
-            text.AppendLine(string.Create(CultureInfo.InvariantCulture, $"## {section.Title}"));
+            text.AppendLine(string.Create(CultureInfo.InvariantCulture, $"## {_redactor.Redact(section.Title)}"));
             text.AppendLine();
             text.AppendLine("| Item | Value |");
             text.AppendLine("|---|---|");
             foreach (var item in section.Items)
             {
-                text.AppendLine($"| {Escape(item.Name)} | {Escape(_redactor.Redact(item.Value))} |");
+                text.AppendLine($"| {Escape(_redactor.Redact(item.Name))} | {Escape(_redactor.Redact(item.Value))} |");
             }
 
             text.AppendLine();
@@ -65,7 +65,7 @@ public sealed class ReportBuilder
         foreach (var entry in report.StartupEntries)
         {
             text.AppendLine(
-                $"| {Escape(entry.Name)} | {entry.Mechanism} | {entry.Scope} | {entry.State} "
+                $"| {Escape(_redactor.Redact(entry.Name))} | {entry.Mechanism} | {entry.Scope} | {entry.State} "
                 + $"| {entry.Assessment.Category} | {entry.Assessment.Risk} | {entry.Signature.Status} "
                 + $"| {Escape(_redactor.Redact(entry.CommandLine))} |");
         }
@@ -77,7 +77,7 @@ public sealed class ReportBuilder
         text.AppendLine("|---|---|---|---|");
         foreach (var record in report.Journal)
         {
-            text.AppendLine($"| {record.Timestamp:yyyy-MM-dd HH:mm:ss} | {Escape(record.EntryName)} | {Escape(record.Action)} | {record.Status} |");
+            text.AppendLine($"| {record.Timestamp:yyyy-MM-dd HH:mm:ss} | {Escape(_redactor.Redact(record.EntryName))} | {Escape(_redactor.Redact(record.Action))} | {record.Status} |");
         }
 
         text.AppendLine();
@@ -101,24 +101,24 @@ public sealed class ReportBuilder
             },
             sections = report.Sections.Select(section => new
             {
-                title = section.Title,
+                title = _redactor.Redact(section.Title),
                 items = section.Items.Select(item => new
                 {
-                    name = item.Name,
+                    name = _redactor.Redact(item.Name),
                     value = _redactor.Redact(item.Value),
                 }),
             }),
             startup = report.StartupEntries.Select(entry => new
             {
                 id = entry.Id,
-                name = entry.Name,
+                name = _redactor.Redact(entry.Name),
                 mechanism = entry.Mechanism.ToString(),
                 scope = entry.Scope.ToString(),
                 state = entry.State.ToString(),
                 category = entry.Assessment.Category.ToString(),
                 risk = entry.Assessment.Risk.ToString(),
                 signature = entry.Signature.Status.ToString(),
-                signer = entry.Signature.Signer,
+                signer = _redactor.Redact(entry.Signature.Signer),
                 command = _redactor.Redact(entry.CommandLine),
                 path = _redactor.Redact(entry.ResolvedPath),
             }),
@@ -126,10 +126,10 @@ public sealed class ReportBuilder
             {
                 changeId = record.ChangeId,
                 timestamp = record.Timestamp,
-                entry = record.EntryName,
-                action = record.Action,
+                entry = _redactor.Redact(record.EntryName),
+                action = _redactor.Redact(record.Action),
                 status = record.Status.ToString(),
-                error = record.Error,
+                error = _redactor.Redact(record.Error),
             }),
         };
 

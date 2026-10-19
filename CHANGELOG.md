@@ -41,6 +41,12 @@ The format follows Keep a Changelog, and the project adheres to Semantic Version
 
 ### Security
 
+- Reject UNC paths, device paths, mapped network drives and link targets before signature, icon or shell probes, preventing SMB authentication from startup entries.
+- Enforce the protected-entry rule in `ChangeExecutor`, so the CLI, rollback and the elevated helper refuse them too.
+- Redact entry names, signer names, journal errors and reviewer notes in reports, not only command lines and paths.
+- Fix the Defender policy deny-list fragment and cover the correct key in tests.
+- Make demo mode refuse apply and revert in the Control Center.
+- Require the elevated intent file and data directory to be local, reject reparse intent files, keep the intent handle open across the UAC prompt and create the result file with `CreateNew`. Malformed JSON is reported cleanly.
 - No network code; banned-API analysis rejects HTTP, socket, DNS and web-request types at compile time.
 - Authenticode verification uses cache-only retrieval with revocation checks disabled.
 - Exports are always redacted; there is no unredacted export path.

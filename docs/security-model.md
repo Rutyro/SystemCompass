@@ -55,11 +55,11 @@ If an administrator enters different credentials at the UAC prompt, the elevated
 
 ### Network leakage
 
-There is no network code. `BannedApiAnalyzers` makes `HttpClient`, `WebRequest`, `Socket` and `Dns` compile errors. WinVerifyTrust is called with `WTD_CACHE_ONLY_URL_RETRIEVAL`, `WTD_REVOCATION_CHECK_NONE` and no UI.
+There is no network code. `BannedApiAnalyzers` makes `HttpClient`, `WebRequest`, `Socket` and `Dns` compile errors. Network, UNC, device, mapped-network-drive and link-target paths are rejected before `File.Exists`, WinVerifyTrust or `SHGetFileInfo`, so a crafted startup entry cannot trigger an SMB authentication. The elevated intent file is also required to be a local, non-reparse file held open by the app across the UAC prompt. WinVerifyTrust is called with `WTD_CACHE_ONLY_URL_RETRIEVAL`, `WTD_REVOCATION_CHECK_NONE` and no UI.
 
 ### Redaction bypass
 
-The report builder accepts only a `Redactor` instance and applies it to every string field. There is no export command that skips redaction. Tests seed a demo report with user names, machine names and company paths and assert that none survive in Markdown or JSON.
+The report builder accepts only a `Redactor` instance and applies it to every free-text field, including entry names, signer names and journal errors. There is no export command that skips redaction. Tests seed entry names, signers and journal errors with user names, machine names and profile paths and assert that none survive in Markdown or JSON.
 
 ### Journal tampering
 

@@ -1,7 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SystemCompass.Core.Changes;
 using SystemCompass.Core.Demo;
 using SystemCompass.Core.Redaction;
 using SystemCompass.Core.Reporting;
+using SystemCompass.Core.Startup;
 
 namespace SystemCompass.Tests;
 
@@ -40,6 +42,54 @@ public sealed class RedactionAndReportTests
         var redacted = redactor.Redact("Contoso project path");
 
         Assert.AreEqual("<REDACTED> project path", redacted);
+    }
+
+    [TestMethod]
+    public void FreeTextReportFieldsAreRedacted()
+    {
+        var now = new DateTimeOffset(2026, 1, 1, 12, 0, 0, TimeSpan.Zero);
+        var redactor = new Redactor(new RedactionOptions
+        {
+            UserName = "alice",
+            UserProfilePath = @"C:\Users\alice",
+            MachineName = "ALICE-PC",
+        });
+        var entry = TestData.Entry(
+            @"C:\Users\alice\evil.lnk",
+            signature: new SignatureInfo(SignatureStatus.Valid, "ALICE-PC signer"));
+        var journal = new JournalRecord(
+            "change1",
+            now,
+            entry.Id,
+            @"C:\Users\alice\entry",
+            "RunKey",
+            "Disable",
+            "Enabled",
+            "Disabled",
+            ChangeStatus.Failed,
+            @"ALICE-PC could not open C:\Users\alice\error");
+        var report = new DiagnosticsReport(
+            now,
+            "0.1.0",
+            "Windows ALICE-PC",
+            [new DiagnosticsSection("Section", [new DiagnosticsItem(@"C:\Users\alice\name", @"C:\Users\alice\value")])],
+            [entry],
+            [journal],
+            new BootMeasurement(false, null, null, "test"));
+        var builder = new ReportBuilder(redactor);
+
+        var markdown = builder.BuildMarkdown(report);
+        var json = builder.BuildJson(report);
+        foreach (var text in new[] { markdown, json })
+        {
+            StringAssert.DoesNotMatch(text, new System.Text.RegularExpressions.Regex("alice"));
+            StringAssert.DoesNotMatch(text, new System.Text.RegularExpressions.Regex("ALICE-PC"));
+            StringAssert.Contains(text, "USERPROFILE");
+            StringAssert.Contains(text, "MACHINE");
+        }
+
+        StringAssert.Contains(markdown, "<USERPROFILE>");
+        StringAssert.Contains(markdown, "<MACHINE>");
     }
 
     [TestMethod]

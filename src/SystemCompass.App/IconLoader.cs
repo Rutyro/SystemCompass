@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using SystemCompass.Core.Startup;
 
 namespace SystemCompass.App;
 
@@ -18,7 +19,7 @@ internal static class IconLoader
 
     public static ImageSource? Get(string? path)
     {
-        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+        if (!LocalPath.IsLocalFile(path) || !File.Exists(path))
         {
             return null;
         }
