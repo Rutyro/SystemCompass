@@ -25,8 +25,9 @@ public sealed class WindowsTweaks : ApplyTweaks
         var kind = MapKind(key.GetValueKind(target.ValueName));
         var data = value switch
         {
-            int number => number.ToString(CultureInfo.InvariantCulture),
-            long number => number.ToString(CultureInfo.InvariantCulture),
+            // DWord values above int.MaxValue come back as negative ints.
+            int number => unchecked((uint)number).ToString(CultureInfo.InvariantCulture),
+            long number => unchecked((ulong)number).ToString(CultureInfo.InvariantCulture),
             byte[] bytes => Convert.ToHexString(bytes),
             _ => value.ToString() ?? string.Empty,
         };
