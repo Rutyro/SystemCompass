@@ -49,6 +49,8 @@ A tweak is a declarative JSON object embedded in the assembly (`Tweaks/catalog.j
 | `registryDelete` | hive, keyPath, valueName | Delete a value |
 | `serviceStartType` | serviceName, mode | `sc config <name> start= <mode>` |
 | `powerSetting` | subGroup, setting, acValue, dcValue | Active power scheme via PowrProf |
+| `tcpGlobal` | name, value | `netsh int tcp set global <name>=<value>`; names are allow-listed |
+| `scheduledTask` | taskPath, enabled | `schtasks /Change /TN <path> /ENABLE|/DISABLE`; protected task folders are denied |
 
 Supported registry kinds: `String`, `ExpandString`, `DWord`, `QWord`, `Binary` (hex string).
 
@@ -105,3 +107,16 @@ The test suite runs this validator, so a violating catalog fails CI.
 ## Why no `bcdedit` in v0.1
 
 Boot configuration changes are high-impact, partly irreversible and hard to verify without a reboot. They are deliberately deferred until a snapshot mechanism and a reboot-aware verification design exist. See [roadmap](roadmap.md).
+
+## Deliberately not migrated from the author's scripts
+
+The catalog is a curated migration, not a script dump. These script functions are refused on purpose:
+
+- security-reducing settings: Defender, SmartScreen, UAC (`EnableLUA`), phishing filters, exploit mitigations, VBS/HVCI, Windows Update policies;
+- `bcdedit` settings that affect the hypervisor, DEP/PAE, memory layout, TPM entropy or driver integrity;
+- IFEO `Debugger` hijacks that redirect system binaries to `taskkill.exe`;
+- hardware-specific device paths, GPU/NVMe vendor keys and per-device USB flags;
+- wholesale service disabling (the catalog uses Manual or documented policy values);
+- destructive and repair scripts that delete files, reset Winsock or restore Windows components.
+
+`netsh` arguments are allow-listed, and scheduled-task paths are deny-listed, so a catalog edit cannot smuggle an arbitrary command through either operation.

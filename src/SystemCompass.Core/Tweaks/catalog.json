@@ -572,7 +572,7 @@
     {
       "id": "best-performance-visual-effects",
       "title": "Set visual effects to best performance",
-      "description": "Selects the Windows 'Adjust for best performance' visual profile for the current user. Removes several animations and shadows.",
+      "description": "Selects the Windows 'Adjust for best performance' visual-effects set and writes each per-effect override used by the Performance Options dialog.",
       "category": "Visuals",
       "evidence": "Community",
       "links": [],
@@ -620,6 +620,150 @@
           "keyPath": "Control Panel\\Desktop\\WindowMetrics",
           "valueName": "MaxAnimate",
           "kind": "String",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\AnimateMinMax",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\ComboBoxAnimation",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\ControlAnimations",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\CursorShadow",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\DragFullWindows",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\DropShadow",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\DWMAeroPeekEnabled",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\DWMEnabled",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\DWMSaveThumbnailEnabled",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\ListBoxSmoothScrolling",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\ListviewAlphaSelect",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\ListviewShadow",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\MenuAnimation",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\SelectionFade",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\TaskbarAnimations",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\Themes",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\ThumbnailsOrIcon",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\TooltipAnimation",
+          "valueName": "DefaultApplied",
+          "kind": "DWord",
           "data": "0"
         }
       ]
@@ -849,6 +993,1078 @@
           "valueName": "KeyboardSpeed",
           "kind": "String",
           "data": "31"
+        }
+      ]
+    },
+    {
+      "id": "classic-alt-tab",
+      "title": "Use the classic Alt+Tab switcher",
+      "description": "Shows the compact pre-Windows 10 Alt+Tab list instead of full-screen window thumbnails. Explorer must restart before the change is visible.",
+      "category": "Explorer",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+          "valueName": "AltTabSettings",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-aero-peek",
+      "title": "Disable Aero Peek",
+      "description": "Turns off the desktop preview shown when the pointer rests on the Show desktop button.",
+      "category": "Visuals",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\DWM",
+          "valueName": "EnableAeroPeek",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "delay-taskbar-preview-hover",
+      "title": "Delay taskbar previews",
+      "description": "Sets the taskbar thumbnail hover delay to a long value so previews no longer appear while the pointer merely crosses the taskbar.",
+      "category": "Explorer",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "ExtendedUIHoverTime",
+          "kind": "DWord",
+          "data": "196608"
+        }
+      ]
+    },
+    {
+      "id": "disable-hover-delays",
+      "title": "Remove menu and tooltip hover delays",
+      "description": "Removes the hover delay for menus and tooltips and lets background windows take the foreground. The focus value changes how Windows arbitrates window activation.",
+      "category": "Input",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Desktop",
+          "valueName": "MouseHoverTime",
+          "kind": "String",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Desktop",
+          "valueName": "ForegroundLockTimeout",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-bing-web-results",
+      "title": "Turn off Bing results in Start search",
+      "description": "Stops Start search from sending queries to Bing and turns off the Cortana consent value for the current user.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search",
+          "valueName": "BingSearchEnabled",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search",
+          "valueName": "CortanaConsent",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-web-search-and-cortana",
+      "title": "Disable web search and Cortana policies",
+      "description": "Applies the machine policies that keep Start search local and turn off Cortana. The same policy set is used by managed Windows installations.",
+      "category": "Privacy",
+      "evidence": "MicrosoftDocumented",
+      "links": [
+        "https://learn.microsoft.com/windows/client-management/mdm/policy-csp-search"
+      ],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search",
+          "valueName": "AllowCortana",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search",
+          "valueName": "DisableWebSearch",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search",
+          "valueName": "ConnectedSearchUseWeb",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search",
+          "valueName": "ConnectedSearchUseWebOverMeteredConnections",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-search-history",
+      "title": "Turn off local search history",
+      "description": "Stops Windows from keeping the list of previously searched items used by Start and search suggestions.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search",
+          "valueName": "DeviceHistoryEnabled",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search",
+          "valueName": "HistoryViewEnabled",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-feedback-requests",
+      "title": "Turn off Windows feedback prompts",
+      "description": "Applies the policy that stops Windows from showing feedback notifications for the device.",
+      "category": "Privacy",
+      "evidence": "MicrosoftDocumented",
+      "links": [
+        "https://learn.microsoft.com/windows/client-management/mdm/policy-csp-experience"
+      ],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "Software\\Policies\\Microsoft\\Windows\\DataCollection",
+          "valueName": "DoNotShowFeedbackNotifications",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-ink-workspace",
+      "title": "Turn off Windows Ink Workspace",
+      "description": "Hides the pen workspace and its suggested-apps area. Pen input itself continues to work.",
+      "category": "Privacy",
+      "evidence": "MicrosoftDocumented",
+      "links": [
+        "https://learn.microsoft.com/windows/client-management/mdm/policy-csp-windowsinkworkspace"
+      ],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\WindowsInkWorkspace",
+          "valueName": "AllowWindowsInkWorkspace",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\WindowsInkWorkspace",
+          "valueName": "AllowSuggestedAppsInWindowsInkWorkspace",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-app-compat-assistant",
+      "title": "Turn off the compatibility assistant and inventory",
+      "description": "Stops the Program Compatibility Assistant, application inventory and usage reporting. If an older application depends on an automatic compatibility fix, re-enable this tweak.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat",
+          "valueName": "AITEnable",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat",
+          "valueName": "DisableInventory",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat",
+          "valueName": "DisablePCA",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat",
+          "valueName": "DisableUAR",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-mfu-tracking",
+      "title": "Turn off most-frequently-used app tracking",
+      "description": "Stops Windows from tracking which applications are used most often for Start and search suggestions.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows",
+          "valueName": "DisableMFUTracking",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-cloud-content-suggestions",
+      "title": "Turn off cloud content suggestions",
+      "description": "Disables soft-landing content and Spotlight suggestions delivered through the cloud content policy path.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "Software\\Policies\\Microsoft\\Windows\\CloudContent",
+          "valueName": "DisableSoftLanding",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "Software\\Policies\\Microsoft\\Windows\\CloudContent",
+          "valueName": "DisableWindowsSpotlightFeatures",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-game-bar-presence",
+      "title": "Disable the Game Bar presence writer",
+      "description": "Stops the Game Bar presence server from activating. The Game Bar package is not removed; sign out or restart if the change does not appear immediately.",
+      "category": "Gaming",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Microsoft\\WindowsRuntime\\ActivatableClassId\\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter",
+          "valueName": "ActivationType",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-game-dvr-policy",
+      "title": "Block Game DVR by policy",
+      "description": "Applies the machine policy that disallows Game DVR and broadcasting. Complements the per-user Game DVR tweak.",
+      "category": "Gaming",
+      "evidence": "MicrosoftDocumented",
+      "links": [
+        "https://learn.microsoft.com/windows/client-management/mdm/policy-csp-applicationmanagement"
+      ],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR",
+          "valueName": "AllowGameDVR",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "xbox-services-manual",
+      "title": "Set optional Xbox services to Manual",
+      "description": "Sets the four optional Xbox services to Manual. They are not disabled and can still start on demand; revert restores each previous start type.",
+      "category": "Services",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "serviceStartType",
+          "serviceName": "XblAuthManager",
+          "mode": "Manual"
+        },
+        {
+          "type": "serviceStartType",
+          "serviceName": "XblGameSave",
+          "mode": "Manual"
+        },
+        {
+          "type": "serviceStartType",
+          "serviceName": "XboxGipSvc",
+          "mode": "Manual"
+        },
+        {
+          "type": "serviceStartType",
+          "serviceName": "XboxNetApiSvc",
+          "mode": "Manual"
+        }
+      ]
+    },
+    {
+      "id": "diagnostic-services-manual",
+      "title": "Set diagnostic services to Manual",
+      "description": "Removes the automatic start of the Connected User Experiences and Telemetry service and the WAP push message service. The services are not stopped or disabled.",
+      "category": "Services",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "serviceStartType",
+          "serviceName": "DiagTrack",
+          "mode": "Manual"
+        },
+        {
+          "type": "serviceStartType",
+          "serviceName": "dmwappushservice",
+          "mode": "Manual"
+        }
+      ]
+    },
+    {
+      "id": "limit-diagnostic-telemetry",
+      "title": "Set telemetry to the lowest policy level",
+      "description": "Sets the diagnostic data policy to 0. Windows Pro may treat this as the minimum allowed level, while Enterprise and Education honor it fully; diagnostic events can still be generated locally.",
+      "category": "Privacy",
+      "evidence": "MicrosoftDocumented",
+      "links": [
+        "https://learn.microsoft.com/windows/client-management/mdm/policy-csp-system"
+      ],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+          "valueName": "AllowTelemetry",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-energy-telemetry",
+      "title": "Turn off energy-estimation logging",
+      "description": "Stops Windows from logging per-application energy estimates used for diagnostic telemetry.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\TaggedEnergy",
+          "valueName": "DisableTaggedEnergyLogging",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\TaggedEnergy",
+          "valueName": "TelemetryMaxApplication",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\TaggedEnergy",
+          "valueName": "TelemetryMaxTagPerApplication",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "boot-only-prefetch",
+      "title": "Keep boot prefetching only",
+      "description": "Keeps prefetch data for boot and turns off application prefetch and superfetch behaviour. On fast SSDs the benefit is usually small; revert if applications start more slowly.",
+      "category": "System",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": true,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters",
+          "valueName": "EnablePrefetcher",
+          "kind": "DWord",
+          "data": "2"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters",
+          "valueName": "EnableSuperfetch",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-last-access-timestamps",
+      "title": "Disable NTFS last-access timestamps",
+      "description": "Stops NTFS from updating the last-access time when a file is read. Some backup, indexing and forensic tools rely on this timestamp.",
+      "category": "System",
+      "evidence": "MicrosoftDocumented",
+      "links": [
+        "https://learn.microsoft.com/windows-server/administration/windows-commands/fsutil-behavior"
+      ],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\FileSystem",
+          "valueName": "NtfsDisableLastAccessUpdate",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "low-latency-tcp-ack",
+      "title": "Reduce delayed TCP acknowledgements",
+      "description": "Sets the global TCP acknowledgement defaults to acknowledge immediately and disable Nagle-style coalescing. This can lower latency for small packets while increasing packet count and CPU overhead.",
+      "category": "Network",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": true,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
+          "valueName": "TcpAckFrequency",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
+          "valueName": "TCPNoDelay",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
+          "valueName": "TcpDelAckTicks",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "afd-low-latency",
+      "title": "Tune AFD socket buffering",
+      "description": "Sets the community-established AFD send and receive thresholds and window sizes. These values are not covered by a Microsoft performance guarantee.",
+      "category": "Network",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": true,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters",
+          "valueName": "FastSendDatagramThreshold",
+          "kind": "DWord",
+          "data": "1500"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters",
+          "valueName": "FastCopyReceiveThreshold",
+          "kind": "DWord",
+          "data": "1500"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters",
+          "valueName": "DefaultSendWindow",
+          "kind": "DWord",
+          "data": "65535"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters",
+          "valueName": "DefaultReceiveWindow",
+          "kind": "DWord",
+          "data": "65535"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters",
+          "valueName": "BufferMultiplier",
+          "kind": "DWord",
+          "data": "512"
+        }
+      ]
+    },
+    {
+      "id": "tcp-globals-low-latency",
+      "title": "Apply global TCP low-latency parameters",
+      "description": "Sets receive-window autotuning, receive-side coalescing, ECN, timestamps and selective-ack resilience through netsh. Every previous value is readable with netsh int tcp show global and is restored on revert.",
+      "category": "Network",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "tcpGlobal",
+          "name": "autotuninglevel",
+          "value": "normal"
+        },
+        {
+          "type": "tcpGlobal",
+          "name": "rss",
+          "value": "enabled"
+        },
+        {
+          "type": "tcpGlobal",
+          "name": "rsc",
+          "value": "disabled"
+        },
+        {
+          "type": "tcpGlobal",
+          "name": "ecncapability",
+          "value": "disabled"
+        },
+        {
+          "type": "tcpGlobal",
+          "name": "timestamps",
+          "value": "disabled"
+        },
+        {
+          "type": "tcpGlobal",
+          "name": "nonsackrttresiliency",
+          "value": "disabled"
+        }
+      ]
+    },
+    {
+      "id": "extend-dns-cache",
+      "title": "Extend the DNS cache lifetime",
+      "description": "Raises the maximum DNS cache lifetime to one day. After a DNS record changes, the old answer can persist until it expires or the cache is flushed.",
+      "category": "Network",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters",
+          "valueName": "MaxCacheTtl",
+          "kind": "DWord",
+          "data": "86400"
+        }
+      ]
+    },
+    {
+      "id": "release-qos-reserved-bandwidth",
+      "title": "Remove the QoS best-effort reservation",
+      "description": "Removes the 80 percent best-effort limit used by the QoS packet scheduler. Modern Windows reserves bandwidth only when an application requests QoS, so the practical effect is usually small.",
+      "category": "Network",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\Psched",
+          "valueName": "NonBestEffortLimit",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "enable-hardware-gpu-scheduling",
+      "title": "Enable hardware-accelerated GPU scheduling",
+      "description": "Turns on GPU scheduling in the graphics driver. Requires a supported GPU and driver; revert if games or capture tools become unstable.",
+      "category": "Gaming",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": true,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers",
+          "valueName": "HwSchMode",
+          "kind": "DWord",
+          "data": "2"
+        }
+      ]
+    },
+    {
+      "id": "keep-system-awake",
+      "title": "Keep the system awake on AC power",
+      "description": "Stops the display, disk and sleep timers from turning the PC off while it is plugged in. Battery timers are left unchanged.",
+      "category": "Power",
+      "evidence": "MicrosoftDocumented",
+      "links": [
+        "https://learn.microsoft.com/windows-hardware/design/device-experiences/powercfg-command-line-options"
+      ],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "powerSetting",
+          "subGroup": "238c9fa8-0aad-41ed-83f4-97be242c8f20",
+          "setting": "29f6c1db-86da-48c5-9fdb-f2b67b1f44da",
+          "acValue": 0,
+          "dcValue": null
+        },
+        {
+          "type": "powerSetting",
+          "subGroup": "238c9fa8-0aad-41ed-83f4-97be242c8f20",
+          "setting": "9d7815a6-7ee4-497e-8888-515a05f02364",
+          "acValue": 0,
+          "dcValue": null
+        },
+        {
+          "type": "powerSetting",
+          "subGroup": "238c9fa8-0aad-41ed-83f4-97be242c8f20",
+          "setting": "94d3a615-a899-4ac5-ae2b-e4d8f634367f",
+          "acValue": 0,
+          "dcValue": null
+        },
+        {
+          "type": "powerSetting",
+          "subGroup": "7516b95f-f776-4464-8c53-06167f40cc99",
+          "setting": "3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e",
+          "acValue": 0,
+          "dcValue": null
+        },
+        {
+          "type": "powerSetting",
+          "subGroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+          "setting": "6738e2c4-e8a5-4a42-b16a-e040e769756e",
+          "acValue": 0,
+          "dcValue": null
+        }
+      ]
+    },
+    {
+      "id": "pcie-aspm-off",
+      "title": "Disable PCIe link power management",
+      "description": "Disables PCIe Active State Power Management on AC power. It can reduce NVMe and GPU wake latency at the cost of higher idle power.",
+      "category": "Power",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "powerSetting",
+          "subGroup": "501a4d13-42af-4429-9fd1-a8218c268e20",
+          "setting": "ee12f906-d277-404b-b6da-e5fa1a576df5",
+          "acValue": 0,
+          "dcValue": null
+        }
+      ]
+    },
+    {
+      "id": "raise-games-task-priority",
+      "title": "Raise the MMCSS Games task priority",
+      "description": "Raises the multimedia scheduler priority for the Games task class to 6. It changes scheduler preference, not a frame-rate guarantee.",
+      "category": "Gaming",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "valueName": "Priority",
+          "kind": "DWord",
+          "data": "6"
+        }
+      ]
+    },
+    {
+      "id": "request-high-timer-resolution",
+      "title": "Request a high system timer resolution",
+      "description": "Requests a 0.5 ms timer through the multimedia and QoS profiles and enables global timer-resolution requests. The kernel value needs a restart and the setting increases idle power use.",
+      "category": "System",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": true,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "valueName": "TimerResolution",
+          "kind": "DWord",
+          "data": "5"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\Psched",
+          "valueName": "TimerResolution",
+          "kind": "DWord",
+          "data": "5"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel",
+          "valueName": "GlobalTimerResolutionRequests",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-telemetry-scheduled-tasks",
+      "title": "Disable telemetry and compatibility tasks",
+      "description": "Disables the telemetry, compatibility-appraiser and Customer Experience Improvement tasks listed in the operation summary. Each task's previous state is captured and restored on revert.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Application Experience\\AitAgent",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Application Experience\\ProgramDataUpdater",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\BthSQM",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\KernelCeipTask",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\PI\\Sqm-Tasks",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Power Efficiency Diagnostics\\AnalyzeSystem",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClient",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload",
+          "enabled": false
+        }
+      ]
+    },
+    {
+      "id": "disable-diagnostics-maintenance-tasks",
+      "title": "Disable diagnostic maintenance tasks",
+      "description": "Disables background diagnostics and network trace collection tasks. Security, update and backup tasks are never targeted by this catalog.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\DiskFootprint\\Diagnostics",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Diagnosis\\Scheduled",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\NetTrace\\GatherNetworkInfo",
+          "enabled": false
+        },
+        {
+          "type": "scheduledTask",
+          "taskPath": "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
+          "enabled": false
         }
       ]
     }

@@ -173,9 +173,24 @@ public sealed class TweakEngine
                 null,
                 _backend.ReadPowerSetting(power.SubGroup, power.Setting, true),
                 _backend.ReadPowerSetting(power.SubGroup, power.Setting, false)),
+            TcpGlobal tcp => TextState(_backend.ReadTcpGlobal(tcp.Name)),
+            ScheduledTaskState task => new TweakOpState(
+                true,
+                null,
+                null,
+                null,
+                null,
+                _backend.ReadScheduledTaskEnabled(task.TaskPath)),
             _ => throw new NotSupportedException(operation.GetType().Name),
         };
     }
+
+    private static TweakOpState TextState(string? text) => new(
+        text is not null,
+        text is null ? null : new TweakValue(RegistryValueKindKind.String, text),
+        null,
+        null,
+        null);
 
     private TweakOpState ReadRegistryState(RegistryTarget target)
     {
@@ -203,6 +218,12 @@ public sealed class TweakEngine
                     _backend.WritePowerSetting(power.SubGroup, power.Setting, false, dc);
                 }
 
+                break;
+            case TcpGlobal tcp:
+                _backend.WriteTcpGlobal(tcp.Name, tcp.Value);
+                break;
+            case ScheduledTaskState task:
+                _backend.SetScheduledTaskEnabled(task.TaskPath, task.Enabled);
                 break;
             default:
                 throw new NotSupportedException(operation.GetType().Name);
@@ -234,6 +255,12 @@ public sealed class TweakEngine
                 }
 
                 break;
+            case TcpGlobal tcp when state.Value is { } value:
+                _backend.WriteTcpGlobal(tcp.Name, value.Data);
+                break;
+            case ScheduledTaskState task when state.TaskEnabled is { } enabled:
+                _backend.SetScheduledTaskEnabled(task.TaskPath, enabled);
+                break;
             default:
                 break;
         }
@@ -263,6 +290,9 @@ public sealed class TweakEngine
             PowerSetting power => _backend.ReadPowerSetting(power.SubGroup, power.Setting, true) == power.AcValue
                 && (power.DcValue is null
                     || _backend.ReadPowerSetting(power.SubGroup, power.Setting, false) == power.DcValue),
+            TcpGlobal tcp => string.Equals(
+                _backend.ReadTcpGlobal(tcp.Name), tcp.Value, StringComparison.OrdinalIgnoreCase),
+            ScheduledTaskState task => _backend.ReadScheduledTaskEnabled(task.TaskPath) == task.Enabled,
             _ => false,
         };
     }

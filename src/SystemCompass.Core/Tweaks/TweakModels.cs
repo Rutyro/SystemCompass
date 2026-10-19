@@ -43,6 +43,8 @@ public sealed record TweakValue(RegistryValueKindKind Kind, string Data);
 [JsonDerivedType(typeof(RegistryDelete), "registryDelete")]
 [JsonDerivedType(typeof(ServiceStartType), "serviceStartType")]
 [JsonDerivedType(typeof(PowerSetting), "powerSetting")]
+[JsonDerivedType(typeof(TcpGlobal), "tcpGlobal")]
+[JsonDerivedType(typeof(ScheduledTaskState), "scheduledTask")]
 public abstract record TweakOperation
 {
     public abstract string Describe();
@@ -84,6 +86,25 @@ public sealed record PowerSetting(
         : $"Power setting {Setting} AC={AcValue}";
 }
 
+/// <summary>
+/// A documented <c>netsh int tcp set global</c> value. The name is checked
+/// against an allow-list so the catalog can never smuggle arbitrary commands.
+/// </summary>
+public sealed record TcpGlobal(string Name, string Value) : TweakOperation
+{
+    public override string Describe() => $"netsh int tcp set global {Name}={Value}";
+}
+
+/// <summary>
+/// Enables or disables one registered scheduled task. Task paths are checked
+/// against a deny-list for update, security and maintenance infrastructure.
+/// </summary>
+public sealed record ScheduledTaskState(string TaskPath, bool Enabled) : TweakOperation
+{
+    public override string Describe() =>
+        $"Scheduled task {TaskPath} = {(Enabled ? "enabled" : "disabled")}";
+}
+
 public sealed record TweakDefinition(
     string Id,
     string Title,
@@ -106,7 +127,8 @@ public sealed record TweakOpState(
     TweakValue? Value,
     ServiceStartModeKind? ServiceMode,
     uint? PowerAc,
-    uint? PowerDc);
+    uint? PowerDc,
+    bool? TaskEnabled = null);
 
 public enum TweakStatus
 {
@@ -137,4 +159,12 @@ public interface ApplyTweaks
     uint? ReadPowerSetting(Guid subGroup, Guid setting, bool ac);
 
     void WritePowerSetting(Guid subGroup, Guid setting, bool ac, uint value);
+
+    string? ReadTcpGlobal(string name);
+
+    void WriteTcpGlobal(string name, string value);
+
+    bool? ReadScheduledTaskEnabled(string taskPath);
+
+    void SetScheduledTaskEnabled(string taskPath, bool enabled);
 }

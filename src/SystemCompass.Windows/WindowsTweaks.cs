@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
+using System.Xml.Linq;
 using Microsoft.Win32;
 using SystemCompass.Core.Tweaks;
 
@@ -7,6 +9,9 @@ namespace SystemCompass.Windows;
 
 public sealed class WindowsTweaks : ApplyTweaks
 {
+    private static readonly XNamespace TaskNamespace =
+        "http://schemas.microsoft.com/windows/2004/02/mit/task";
+
     public TweakValue? ReadRegistry(RegistryTarget target)
     {
         using var baseKey = WindowsRegistry.OpenBase(target.Hive);
@@ -76,28 +81,7 @@ public sealed class WindowsTweaks : ApplyTweaks
             _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, "Unsupported start mode."),
         };
 
-        var startInfo = new ProcessStartInfo("sc.exe")
-        {
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
-        startInfo.ArgumentList.Add("config");
-        startInfo.ArgumentList.Add(serviceName);
-        startInfo.ArgumentList.Add("start=");
-        startInfo.ArgumentList.Add(startMode);
-
-        using var process = Process.Start(startInfo)
-            ?? throw new InvalidOperationException("sc.exe could not be started.");
-        var output = process.StandardOutput.ReadToEnd();
-        var error = process.StandardError.ReadToEnd();
-        process.WaitForExit();
-        if (process.ExitCode != 0)
-        {
-            throw new InvalidOperationException(
-                $"sc config failed with exit code {process.ExitCode}: {error.Trim()} {output.Trim()}".Trim());
-        }
+        RunToolChecked("sc.exe", "config", serviceName, "start=", startMode);
     }
 
     public uint? ReadPowerSetting(Guid subGroup, Guid setting, bool ac)
@@ -111,6 +95,112 @@ public sealed class WindowsTweaks : ApplyTweaks
         var scheme = PowerNative.GetActiveScheme()
             ?? throw new InvalidOperationException("No active power scheme is available.");
         PowerNative.Write(scheme, subGroup, setting, ac, value);
+    }
+
+    public string? ReadTcpGlobal(string name)
+    {
+        var result = RunTool("netsh.exe", "int", "tcp", "dump");
+        if (result.ExitCode != 0)
+        {
+            return null;
+        }
+
+        const string prefix = "set global ";
+        foreach (var raw in result.Output.Split('\n'))
+        {
+            var line = raw.Trim();
+            if (!line.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            foreach (var pair in line[prefix.Length..].Split(
+                ' ', StringSplitOptions.RemoveEmptyEntries))
+            {
+                var separator = pair.IndexOf('=');
+                if (separator > 0
+                    && pair[..separator].Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return pair[(separator + 1)..];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public void WriteTcpGlobal(string name, string value)
+    {
+        RunToolChecked("netsh.exe", "int", "tcp", "set", "global", $"{name}={value}");
+    }
+
+    public bool? ReadScheduledTaskEnabled(string taskPath)
+    {
+        var result = RunTool("schtasks.exe", "/Query", "/TN", taskPath, "/XML");
+        if (result.ExitCode != 0)
+        {
+            return null;
+        }
+
+        try
+        {
+            var document = XDocument.Parse(result.Output.TrimStart('\uFEFF'));
+            var settings = document.Root?.Element(TaskNamespace + "Settings");
+            var enabled = settings?.Element(TaskNamespace + "Enabled")?.Value;
+            return !string.Equals(enabled, "false", StringComparison.OrdinalIgnoreCase);
+        }
+        catch (System.Xml.XmlException)
+        {
+            return null;
+        }
+    }
+
+    public void SetScheduledTaskEnabled(string taskPath, bool enabled)
+    {
+        RunToolChecked(
+            "schtasks.exe",
+            "/Change",
+            "/TN",
+            taskPath,
+            enabled ? "/ENABLE" : "/DISABLE");
+    }
+
+    private static (int ExitCode, string Output, string Error) RunTool(
+        string fileName,
+        params string[] arguments)
+    {
+        var startInfo = new ProcessStartInfo(fileName)
+        {
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            StandardOutputEncoding = Encoding.UTF8,
+            StandardErrorEncoding = Encoding.UTF8,
+        };
+        foreach (var argument in arguments)
+        {
+            startInfo.ArgumentList.Add(argument);
+        }
+
+        using var process = Process.Start(startInfo)
+            ?? throw new InvalidOperationException($"{fileName} could not be started.");
+        var output = process.StandardOutput.ReadToEnd();
+        var error = process.StandardError.ReadToEnd();
+        process.WaitForExit();
+        return (process.ExitCode, output, error);
+    }
+
+    private static string RunToolChecked(string fileName, params string[] arguments)
+    {
+        var result = RunTool(fileName, arguments);
+        if (result.ExitCode != 0)
+        {
+            throw new InvalidOperationException(
+                $"{fileName} failed with exit code {result.ExitCode}: {result.Error.Trim()} {result.Output.Trim()}".Trim());
+        }
+
+        return result.Output;
     }
 
     private static object ConvertValue(TweakValue value) => value.Kind switch

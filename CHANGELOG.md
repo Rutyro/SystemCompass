@@ -4,6 +4,19 @@ All notable changes to this project are documented in this file.
 
 The format follows Keep a Changelog, and the project adheres to Semantic Versioning.
 
+## [Unreleased]
+
+### Added
+
+- `tcpGlobal` operation for allow-listed `netsh int tcp set global` values.
+- `scheduledTask` operation for deny-listed scheduled-task state changes.
+- 32 additional curated tweaks migrated from the author's own scripts, including search/privacy policies, diagnostic tasks, TCP/AFD settings, power timers and per-effect visual overrides. Catalog total: 64.
+- Tests for TCP and scheduled-task round trips and for the extended deny-list.
+
+### Changed
+
+- The security deny-list now also rejects UAC, SmartScreen, phishing-filter, telemetry-reporting and network-hardening values.
+
 ## [0.1.0] - 2026-10-19
 
 ### Added

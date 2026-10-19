@@ -67,6 +67,55 @@ public sealed class ChangeAndTweakTests
     }
 
     [TestMethod]
+    public void TcpGlobalApplyAndRevertRestorePreviousValue()
+    {
+        var tweak = new TweakDefinition(
+            "test-tcp", "Test", "Test tweak", "Test", TweakEvidence.Community, [],
+            TweakRisk.Low, 10240, 99999999, true, false,
+            [new TcpGlobal("autotuninglevel", "disabled")]);
+        var backend = new InMemoryTweaks();
+        backend.TcpGlobals["autotuninglevel"] = "normal";
+        var engine = new TweakEngine(backend, new InMemoryJournal(), TimeProvider.System);
+
+        Assert.AreEqual(TweakStatus.NotApplied, engine.GetStatus(tweak, 26100));
+        Assert.IsTrue(engine.Apply(tweak, 26100).Success);
+        Assert.AreEqual("disabled", backend.TcpGlobals["autotuninglevel"]);
+        Assert.IsTrue(engine.Revert(tweak).Success);
+        Assert.AreEqual("normal", backend.TcpGlobals["autotuninglevel"]);
+    }
+
+    [TestMethod]
+    public void ScheduledTaskApplyAndRevertRestorePreviousState()
+    {
+        const string path = "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator";
+        var tweak = new TweakDefinition(
+            "test-task", "Test", "Test tweak", "Test", TweakEvidence.Community, [],
+            TweakRisk.Low, 10240, 99999999, true, false,
+            [new ScheduledTaskState(path, false)]);
+        var backend = new InMemoryTweaks();
+        backend.ScheduledTasks[path] = true;
+        var engine = new TweakEngine(backend, new InMemoryJournal(), TimeProvider.System);
+
+        Assert.AreEqual(TweakStatus.NotApplied, engine.GetStatus(tweak, 26100));
+        Assert.IsTrue(engine.Apply(tweak, 26100).Success);
+        Assert.IsFalse(backend.ScheduledTasks[path]);
+        Assert.IsTrue(engine.Revert(tweak).Success);
+        Assert.IsTrue(backend.ScheduledTasks[path]);
+    }
+
+    [TestMethod]
+    public void DenyListRejectsArbitraryNetshAndUpdateTasks()
+    {
+        Assert.IsTrue(SecurityDenyList.IsDenied(new TcpGlobal("winsock", "reset")));
+        Assert.IsTrue(SecurityDenyList.IsDenied(
+            new ScheduledTaskState("\\Microsoft\\Windows\\WindowsUpdate\\Automatic App Update", false)));
+        Assert.IsTrue(SecurityDenyList.IsDenied(new RegistrySet(
+            "HKLM", "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+            "EnableLUA", RegistryValueKindKind.DWord, "0")));
+        Assert.IsFalse(SecurityDenyList.IsDenied(new TcpGlobal("autotuninglevel", "normal")));
+    }
+
+    [TestMethod]
     public void SecurityProtectedTweakIsRefused()
     {
         var tweak = new TweakDefinition(
@@ -147,6 +196,10 @@ public sealed class ChangeAndTweakTests
     {
         public Dictionary<string, TweakValue> Values { get; } = new(StringComparer.OrdinalIgnoreCase);
 
+        public Dictionary<string, string> TcpGlobals { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+        public Dictionary<string, bool> ScheduledTasks { get; } = new(StringComparer.OrdinalIgnoreCase);
+
         public TweakValue? ReadRegistry(RegistryTarget target)
             => Values.GetValueOrDefault(Key(target));
 
@@ -165,6 +218,16 @@ public sealed class ChangeAndTweakTests
         public void WritePowerSetting(Guid subGroup, Guid setting, bool ac, uint value)
         {
         }
+
+        public string? ReadTcpGlobal(string name) => TcpGlobals.GetValueOrDefault(name);
+
+        public void WriteTcpGlobal(string name, string value) => TcpGlobals[name] = value;
+
+        public bool? ReadScheduledTaskEnabled(string taskPath)
+            => ScheduledTasks.TryGetValue(taskPath, out var enabled) ? enabled : null;
+
+        public void SetScheduledTaskEnabled(string taskPath, bool enabled)
+            => ScheduledTasks[taskPath] = enabled;
 
         private static string Key(RegistryTarget target) => $"{target.Hive}\\{target.KeyPath}\\{target.ValueName}";
     }

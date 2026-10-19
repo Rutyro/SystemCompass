@@ -17,7 +17,7 @@ SystemCompass erfasst die Autostart-Mechanismen, die Windows tatsächlich bereit
 | Verifikation | Jede Änderung wird aus Registry/SCM/Aufgabenplanung zurückgelesen; eine abweichende Rückmeldung gilt als Fehlschlag |
 | Journal | Fortlaufendes JSONL mit Änderungs-ID, Vorher/Nachher, Status und Rollback |
 | Snapshots | Vergleich vor/nach einer Bereinigung; neue und erneut aktivierte Einträge werden erkannt |
-| Tweak-Katalog | 32 kuratierte Einträge mit Evidenzstufe, gesichertem Vorher-Wert und Ein-Klick-Revert |
+| Tweak-Katalog | 64 kuratierte Einträge mit Evidenzstufe, gesichertem Vorher-Wert und Ein-Klick-Revert |
 | Berichte | Redigierte Markdown-/JSON-Berichte mit Diagnose, Autostart-Zusammenfassung und einem einzelnen Boot-Messwert |
 | Demo-Modus | Fiktive Daten für Screenshots und Tests ohne Zugriff auf den Rechner |
 | CLI | Skriptfähige Befehle `audit`, `report`, `disable`, `enable`, `rollback`, `tweak`, `data` mit JSON-Ausgabe |
