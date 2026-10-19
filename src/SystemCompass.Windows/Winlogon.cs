@@ -6,7 +6,7 @@ namespace SystemCompass.Windows;
 /// <summary>
 /// Winlogon Shell and Userinit are reported for completeness and are read-only.
 /// </summary>
-public sealed class WinlogonProvider : IStartupProvider
+public sealed class Winlogon : ManageStartup
 {
     private const string KeyPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon";
     private static readonly string[] ValueNames = ["Shell", "Userinit"];
@@ -14,7 +14,7 @@ public sealed class WinlogonProvider : IStartupProvider
     private readonly Classifier _classifier;
     private readonly SignatureVerifier _signatures;
 
-    public WinlogonProvider(Classifier classifier, SignatureVerifier signatures)
+    public Winlogon(Classifier classifier, SignatureVerifier signatures)
     {
         _classifier = classifier;
         _signatures = signatures;

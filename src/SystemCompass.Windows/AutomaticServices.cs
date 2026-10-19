@@ -9,7 +9,7 @@ namespace SystemCompass.Windows;
 /// services and non-automatic services are not startup entries. Disabling a
 /// service sets it to Manual; it is never deleted and never stopped.
 /// </summary>
-public sealed class ServiceProvider : IStartupProvider
+public sealed class AutomaticServices : ManageStartup
 {
     private const int AutomaticStart = 2;
     private const int ManualStart = 3;
@@ -18,7 +18,7 @@ public sealed class ServiceProvider : IStartupProvider
     private readonly Classifier _classifier;
     private readonly SignatureVerifier _signatures;
 
-    public ServiceProvider(Classifier classifier, SignatureVerifier signatures)
+    public AutomaticServices(Classifier classifier, SignatureVerifier signatures)
     {
         _classifier = classifier;
         _signatures = signatures;

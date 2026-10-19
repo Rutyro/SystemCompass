@@ -4,7 +4,7 @@ using SystemCompass.Core.Startup;
 
 namespace SystemCompass.Windows;
 
-public sealed class StartupFolderProvider : IStartupProvider
+public sealed class StartupFolders : ManageStartup
 {
     private sealed record Folder(string Path, string Hive, StartupScope Scope, string ApprovalPath);
 
@@ -14,7 +14,7 @@ public sealed class StartupFolderProvider : IStartupProvider
     private readonly string _userStartup;
     private readonly string _commonStartup;
 
-    public StartupFolderProvider(Classifier classifier, SignatureVerifier signatures, TimeProvider clock)
+    public StartupFolders(Classifier classifier, SignatureVerifier signatures, TimeProvider clock)
     {
         _classifier = classifier;
         _signatures = signatures;

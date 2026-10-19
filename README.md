@@ -17,7 +17,7 @@ SystemCompass inventories the startup mechanisms Windows actually exposes, expla
 | Verification | Every change is re-read from the registry/SCM/scheduler; a failed read-back is reported as failed |
 | Journal | Append-only JSONL with change id, before/after, status and rollback support |
 | Snapshots | Compare startup state before and after a cleanup; detect new and re-enabled entries |
-| Tweak catalog | 20 curated, evidence-labelled definitions with captured previous values and one-click revert |
+| Tweak catalog | 32 curated, evidence-labelled definitions with captured previous values and one-click revert |
 | Reports | Redacted Markdown/JSON with diagnostics, startup summary and a single boot-duration sample |
 | Demo mode | Fictional data for screenshots and evaluation without touching the machine |
 | CLI | Scriptable `audit`, `report`, `disable`, `enable`, `rollback`, `tweak`, `data` commands with JSON output |
@@ -128,7 +128,7 @@ More: [docs/architecture.md](docs/architecture.md) · [tweak data model](docs/tw
 
 Every catalog entry declares an evidence level, a risk level, an OS build range and explicit operations. `MicrosoftDocumented` entries must link to `learn.microsoft.com`; the validator fails the catalog otherwise. Operations capture their previous value before writing and are verified afterwards.
 
-The catalog deliberately refuses security-reducing settings. It is a small curated set, not a debloat list, and it makes **no performance promises**.
+The catalog deliberately refuses security-reducing settings. It is a small curated set, not a debloat list, and it makes **no performance promises**. Definitions are newly written from the author's own scripts and public documentation; no third-party code is copied.
 
 ## Privacy
 

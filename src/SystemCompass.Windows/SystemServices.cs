@@ -20,16 +20,16 @@ public sealed class SystemServices
         Journal = new JsonLinesJournal(Path.Combine(dataDirectory, "journal.jsonl"));
         Providers =
         [
-            new RunKeyProvider(Classifier, Signatures, TimeProvider.System),
-            new StartupFolderProvider(Classifier, Signatures, TimeProvider.System),
-            new ScheduledTaskProvider(Classifier, Signatures),
-            new ServiceProvider(Classifier, Signatures),
-            new WinlogonProvider(Classifier, Signatures),
+            new RunKeys(Classifier, Signatures, TimeProvider.System),
+            new StartupFolders(Classifier, Signatures, TimeProvider.System),
+            new ScheduledTasks(Classifier, Signatures),
+            new AutomaticServices(Classifier, Signatures),
+            new Winlogon(Classifier, Signatures),
         ];
         Audit = new StartupAuditService(Providers);
         Changes = new ChangeExecutor(Providers, Journal, TimeProvider.System);
         Catalog = TweakCatalog.FromEmbedded();
-        Tweaks = new TweakEngine(new WindowsTweakBackend(), Journal, TimeProvider.System);
+        Tweaks = new TweakEngine(new WindowsTweaks(), Journal, TimeProvider.System);
         Diagnostics = new WindowsDiagnostics();
         Redactor = Redactor.CreateForCurrentUser();
         Reports = new ReportBuilder(Redactor);
@@ -41,7 +41,7 @@ public sealed class SystemServices
 
     public SignatureVerifier Signatures { get; }
 
-    public IReadOnlyList<IStartupProvider> Providers { get; }
+    public IReadOnlyList<ManageStartup> Providers { get; }
 
     public StartupAuditService Audit { get; }
 
@@ -57,7 +57,7 @@ public sealed class SystemServices
 
     public ReportBuilder Reports { get; }
 
-    public IJournalStore Journal { get; }
+    public RecordChanges Journal { get; }
 
     public static SystemServices Create(string? dataDirectory = null)
     {

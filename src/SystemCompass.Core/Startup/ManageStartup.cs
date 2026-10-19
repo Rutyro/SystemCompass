@@ -1,6 +1,6 @@
 namespace SystemCompass.Core.Startup;
 
-public interface IStartupProvider
+public interface ManageStartup
 {
     StartupMechanism Mechanism { get; }
 

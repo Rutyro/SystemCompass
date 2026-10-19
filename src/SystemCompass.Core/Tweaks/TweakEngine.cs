@@ -13,11 +13,11 @@ public sealed class TweakEngine
 {
     private static readonly JsonSerializerOptions StateJson = new();
 
-    private readonly ITweakBackend _backend;
-    private readonly IJournalStore _journal;
+    private readonly ApplyTweaks _backend;
+    private readonly RecordChanges _journal;
     private readonly TimeProvider _clock;
 
-    public TweakEngine(ITweakBackend backend, IJournalStore journal, TimeProvider clock)
+    public TweakEngine(ApplyTweaks backend, RecordChanges journal, TimeProvider clock)
     {
         _backend = backend;
         _journal = journal;

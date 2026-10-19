@@ -326,7 +326,7 @@ internal static class CliCommands
                 }
             }
 
-            var engine = new TweakEngine(new WindowsTweakBackend(), new InMemoryJournal(), TimeProvider.System);
+            var engine = new TweakEngine(new WindowsTweaks(), new InMemoryJournal(), TimeProvider.System);
             var build = Environment.OSVersion.Version.Build;
             var rows = catalog.Tweaks
                 .Select(tweak => new

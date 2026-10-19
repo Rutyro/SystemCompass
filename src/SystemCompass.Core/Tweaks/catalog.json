@@ -482,6 +482,375 @@
           "dcValue": 0
         }
       ]
+    },
+    {
+      "id": "disable-fullscreen-optimizations",
+      "title": "Disable fullscreen optimizations",
+      "description": "Makes games use exclusive fullscreen behavior instead of the fullscreen-optimization layer. Some games behave differently; revert if a title shows issues.",
+      "category": "Gaming",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "System\\GameConfigStore",
+          "valueName": "GameDVR_FSEBehaviorMode",
+          "kind": "DWord",
+          "data": "2"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "System\\GameConfigStore",
+          "valueName": "GameDVR_HonorUserFSEBehaviorMode",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "System\\GameConfigStore",
+          "valueName": "GameDVR_FSEBehavior",
+          "kind": "DWord",
+          "data": "2"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "System\\GameConfigStore",
+          "valueName": "GameDVR_DXGIHonorFSEWindowsCompatible",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-dwm-animations",
+      "title": "Disable DWM animations",
+      "description": "Turns off window and Flip3D animations for the current user. A visual preference, not a performance guarantee.",
+      "category": "Visuals",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\DWM",
+          "valueName": "Blur",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Policies\\Microsoft\\Windows\\DWM",
+          "valueName": "DisallowAnimations",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Policies\\Microsoft\\Windows\\DWM",
+          "valueName": "DisallowFlip3d",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "best-performance-visual-effects",
+      "title": "Set visual effects to best performance",
+      "description": "Selects the Windows 'Adjust for best performance' visual profile for the current user. Removes several animations and shadows.",
+      "category": "Visuals",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects",
+          "valueName": "VisualFXSetting",
+          "kind": "DWord",
+          "data": "2"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "ListviewShadow",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "TaskbarAnimations",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Desktop\\WindowMetrics",
+          "valueName": "MinAnimate",
+          "kind": "String",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Desktop\\WindowMetrics",
+          "valueName": "MaxAnimate",
+          "kind": "String",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-taskbar-animations",
+      "title": "Disable taskbar animations",
+      "description": "Stops taskbar button and preview animations. Revert restores the previous value.",
+      "category": "Visuals",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "TaskbarAnimations",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-listview-shadows",
+      "title": "Disable list view shadows",
+      "description": "Removes drop shadows behind Explorer list items.",
+      "category": "Visuals",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "ListviewShadow",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-usb-selective-suspend",
+      "title": "Disable USB selective suspend",
+      "description": "Stops Windows from suspending idle USB devices. Can help with input dropouts; increases power use on battery.",
+      "category": "Power",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Services\\USB",
+          "valueName": "DisableSelectiveSuspend",
+          "kind": "DWord",
+          "data": "1"
+        },
+        {
+          "type": "powerSetting",
+          "subGroup": "2a737441-1930-4402-8d77-b2bebba308a3",
+          "setting": "48e6b7a6-50f5-4782-a5d4-53bb8f07e226",
+          "acValue": 0,
+          "dcValue": 0
+        }
+      ]
+    },
+    {
+      "id": "disable-power-throttling",
+      "title": "Disable power throttling",
+      "description": "Stops Windows from throttling background process power state. May reduce battery runtime.",
+      "category": "Power",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling",
+          "valueName": "PowerThrottlingOff",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "foreground-priority-separation",
+      "title": "Prefer foreground processes",
+      "description": "Sets Win32PrioritySeparation to short, variable quanta with foreground boost. A scheduling preference, not a measured benchmark.",
+      "category": "System",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\PriorityControl",
+          "valueName": "Win32PrioritySeparation",
+          "kind": "DWord",
+          "data": "38"
+        }
+      ]
+    },
+    {
+      "id": "mmcss-gaming-responsiveness",
+      "title": "Prioritize multimedia and games",
+      "description": "Sets System Responsiveness to 0 and disables network throttling for multimedia tasks. Affects scheduling and network behavior system-wide.",
+      "category": "Gaming",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "valueName": "SystemResponsiveness",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "valueName": "NetworkThrottlingIndex",
+          "kind": "DWord",
+          "data": "4294967295"
+        }
+      ]
+    },
+    {
+      "id": "core-parking-off",
+      "title": "Disable core parking on AC power",
+      "description": "Sets the minimum unparked cores to 100 percent on AC power. DC values are left unchanged. Revert restores the previous AC value.",
+      "category": "Power",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "powerSetting",
+          "subGroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "0cc5b647-c1df-4637-891a-dec35c318583",
+          "acValue": 100
+        }
+      ]
+    },
+    {
+      "id": "no-recent-documents",
+      "title": "Disable recent document history",
+      "description": "Stops Explorer from recording recently opened documents in the jump list and recent items.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+          "valueName": "NoRecentDocsHistory",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "fast-keyboard-repeat",
+      "title": "Set fastest keyboard repeat",
+      "description": "Sets the shortest keyboard repeat delay and maximum repeat rate for the current user.",
+      "category": "Input",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Keyboard",
+          "valueName": "KeyboardDelay",
+          "kind": "String",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Keyboard",
+          "valueName": "KeyboardSpeed",
+          "kind": "String",
+          "data": "31"
+        }
+      ]
     }
   ]
 }

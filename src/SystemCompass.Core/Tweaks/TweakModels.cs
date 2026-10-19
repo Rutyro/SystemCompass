@@ -122,7 +122,7 @@ public sealed record TweakResult(
     IReadOnlyList<string> Steps,
     string? Error);
 
-public interface ITweakBackend
+public interface ApplyTweaks
 {
     TweakValue? ReadRegistry(RegistryTarget target);
 

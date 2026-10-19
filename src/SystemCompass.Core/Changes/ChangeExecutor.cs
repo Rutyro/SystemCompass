@@ -16,13 +16,13 @@ public sealed record ChangeResult(
 /// </summary>
 public sealed class ChangeExecutor
 {
-    private readonly IReadOnlyList<IStartupProvider> _providers;
-    private readonly IJournalStore _journal;
+    private readonly IReadOnlyList<ManageStartup> _providers;
+    private readonly RecordChanges _journal;
     private readonly TimeProvider _clock;
 
     public ChangeExecutor(
-        IEnumerable<IStartupProvider> providers,
-        IJournalStore journal,
+        IEnumerable<ManageStartup> providers,
+        RecordChanges journal,
         TimeProvider clock)
     {
         _providers = providers.ToArray();

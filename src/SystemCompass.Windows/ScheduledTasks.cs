@@ -11,7 +11,7 @@ namespace SystemCompass.Windows;
 /// Reads task definitions from schtasks XML so localized console output never
 /// has to be parsed. Only tasks with a boot or logon trigger are startup entries.
 /// </summary>
-public sealed class ScheduledTaskProvider : IStartupProvider
+public sealed class ScheduledTasks : ManageStartup
 {
     private static readonly XNamespace TaskNamespace = "http://schemas.microsoft.com/windows/2004/02/mit/task";
     private static readonly Regex TaskBlock = new(
@@ -22,7 +22,7 @@ public sealed class ScheduledTaskProvider : IStartupProvider
     private readonly Classifier _classifier;
     private readonly SignatureVerifier _signatures;
 
-    public ScheduledTaskProvider(Classifier classifier, SignatureVerifier signatures)
+    public ScheduledTasks(Classifier classifier, SignatureVerifier signatures)
     {
         _classifier = classifier;
         _signatures = signatures;

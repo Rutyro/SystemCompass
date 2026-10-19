@@ -3,7 +3,7 @@ using SystemCompass.Core.Startup;
 
 namespace SystemCompass.Windows;
 
-public sealed class RunKeyProvider : IStartupProvider
+public sealed class RunKeys : ManageStartup
 {
     private sealed record Location(
         string Hive,
@@ -35,7 +35,7 @@ public sealed class RunKeyProvider : IStartupProvider
     private readonly SignatureVerifier _signatures;
     private readonly TimeProvider _clock;
 
-    public RunKeyProvider(Classifier classifier, SignatureVerifier signatures, TimeProvider clock)
+    public RunKeys(Classifier classifier, SignatureVerifier signatures, TimeProvider clock)
     {
         _classifier = classifier;
         _signatures = signatures;

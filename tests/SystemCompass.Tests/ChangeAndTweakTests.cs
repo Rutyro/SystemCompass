@@ -12,7 +12,7 @@ public sealed class ChangeAndTweakTests
     public void DisableIsVerifiedAndCanBeRolledBack()
     {
         var entry = TestData.Entry("App");
-        var provider = new FakeStartupProvider(entry);
+        var provider = new FakeStartup(entry);
         var journal = new InMemoryJournal();
         var executor = new ChangeExecutor([provider], journal, TimeProvider.System);
 
@@ -32,7 +32,7 @@ public sealed class ChangeAndTweakTests
     public void VerificationFailureIsReportedAndJournaled()
     {
         var entry = TestData.Entry("Stubborn");
-        var provider = new FakeStartupProvider(entry) { IgnoreChanges = true };
+        var provider = new FakeStartup(entry) { IgnoreChanges = true };
         var journal = new InMemoryJournal();
         var executor = new ChangeExecutor([provider], journal, TimeProvider.System);
 
@@ -50,7 +50,7 @@ public sealed class ChangeAndTweakTests
             "test-tweak", "Test", "Test tweak", "Test", TweakEvidence.Community, [],
             TweakRisk.Low, 10240, 99999999, false, false,
             [new RegistrySet("HKCU", "Software\\Test", "Value", RegistryValueKindKind.DWord, "1")]);
-        var backend = new FakeTweakBackend();
+        var backend = new InMemoryTweaks();
         backend.Values["HKCU\\Software\\Test\\Value"] = new TweakValue(RegistryValueKindKind.DWord, "0");
         var journal = new InMemoryJournal();
         var engine = new TweakEngine(backend, journal, TimeProvider.System);
@@ -74,7 +74,7 @@ public sealed class ChangeAndTweakTests
             TweakRisk.High, 10240, 99999999, true, false,
             [new RegistrySet("HKLM", "SOFTWARE\\Policies\\Microsoft\\Windows\\Defender", "DisableAntiSpyware",
                 RegistryValueKindKind.DWord, "1")]);
-        var engine = new TweakEngine(new FakeTweakBackend(), new InMemoryJournal(), TimeProvider.System);
+        var engine = new TweakEngine(new InMemoryTweaks(), new InMemoryJournal(), TimeProvider.System);
 
         var result = engine.Apply(tweak, 26100);
 
@@ -111,11 +111,11 @@ public sealed class ChangeAndTweakTests
         Assert.AreEqual(SnapshotChangeKind.Removed, changes.Single(change => change.Entry.Id == "a").Kind);
     }
 
-    private sealed class FakeStartupProvider : IStartupProvider
+    private sealed class FakeStartup : ManageStartup
     {
         private readonly List<StartupEntry> _entries;
 
-        public FakeStartupProvider(params StartupEntry[] entries)
+        public FakeStartup(params StartupEntry[] entries)
         {
             _entries = entries.ToList();
         }
@@ -143,7 +143,7 @@ public sealed class ChangeAndTweakTests
         }
     }
 
-    private sealed class FakeTweakBackend : ITweakBackend
+    private sealed class InMemoryTweaks : ApplyTweaks
     {
         public Dictionary<string, TweakValue> Values { get; } = new(StringComparer.OrdinalIgnoreCase);
 

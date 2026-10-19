@@ -2,9 +2,9 @@ namespace SystemCompass.Core.Startup;
 
 public sealed class StartupAuditService
 {
-    private readonly IReadOnlyList<IStartupProvider> _providers;
+    private readonly IReadOnlyList<ManageStartup> _providers;
 
-    public StartupAuditService(IEnumerable<IStartupProvider> providers)
+    public StartupAuditService(IEnumerable<ManageStartup> providers)
     {
         _providers = providers.ToArray();
     }

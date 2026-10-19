@@ -5,7 +5,7 @@ using SystemCompass.Core.Tweaks;
 
 namespace SystemCompass.Windows;
 
-public sealed class WindowsTweakBackend : ITweakBackend
+public sealed class WindowsTweaks : ApplyTweaks
 {
     public TweakValue? ReadRegistry(RegistryTarget target)
     {

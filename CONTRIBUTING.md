@@ -22,9 +22,15 @@ dotnet format SystemCompass.slnx --verify-no-changes
 
 The test suite is Microsoft.Testing.Platform based. Tests that touch the real system must be read-only and tagged `Integration`.
 
+## Naming
+
+- Interfaces name the capability as a verb phrase and carry no `I` prefix: `ManageStartup`, `RecordChanges`, `ApplyTweaks`.
+- Implementations carry the concrete name: `RunKeys`, `ScheduledTasks`, `JsonLinesJournal`, `WindowsTweaks`.
+- A type that performs a check is named after the action, not the noun: `SignatureVerifier`, `Redactor`, `ReportBuilder`.
+
 ## What to test
 
-- Pure logic belongs in `SystemCompass.Core` and must be unit-tested with fakes (`IRegistry` equivalents, `IStartupProvider`, `ITweakBackend`).
+- Pure logic belongs in `SystemCompass.Core` and must be unit-tested with fakes (`IRegistry` equivalents, `ManageStartup`, `ApplyTweaks`).
 - A change is only complete when the state is written, read back and verified.
 - New providers need: enumeration, `GetState`, `SetState`, failure behaviour, and a read-only integration test when practical.
 - New tweaks need: evidence level, link (for Microsoft-documented items), risk, OS range and operations. Run `TweakCatalog.Validate()` via the tests.

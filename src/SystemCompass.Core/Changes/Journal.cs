@@ -23,14 +23,14 @@ public sealed record JournalRecord(
     ChangeStatus Status,
     string? Error = null);
 
-public interface IJournalStore
+public interface RecordChanges
 {
     void Append(JournalRecord record);
 
     IReadOnlyList<JournalRecord> ReadAll();
 }
 
-public sealed class JsonLinesJournal : IJournalStore
+public sealed class JsonLinesJournal : RecordChanges
 {
     private static readonly JsonSerializerOptions Options = new()
     {
@@ -97,7 +97,7 @@ public sealed class JsonLinesJournal : IJournalStore
     }
 }
 
-public sealed class InMemoryJournal : IJournalStore
+public sealed class InMemoryJournal : RecordChanges
 {
     private readonly List<JournalRecord> _records = [];
 
