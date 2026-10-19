@@ -1,0 +1,171 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SystemCompass.Core.Changes;
+using SystemCompass.Core.Startup;
+using SystemCompass.Core.Tweaks;
+
+namespace SystemCompass.Tests;
+
+[TestClass]
+public sealed class ChangeAndTweakTests
+{
+    [TestMethod]
+    public void DisableIsVerifiedAndCanBeRolledBack()
+    {
+        var entry = TestData.Entry("App");
+        var provider = new FakeStartupProvider(entry);
+        var journal = new InMemoryJournal();
+        var executor = new ChangeExecutor([provider], journal, TimeProvider.System);
+
+        var result = executor.SetState(entry, false);
+
+        Assert.IsTrue(result.Success);
+        Assert.AreEqual(EntryState.Disabled, result.ObservedState);
+        Assert.AreEqual(EntryState.Disabled, provider.Enumerate()[0].State);
+
+        var rollback = executor.Rollback(result.ChangeId);
+
+        Assert.IsTrue(rollback.Success);
+        Assert.AreEqual(EntryState.Enabled, provider.Enumerate()[0].State);
+    }
+
+    [TestMethod]
+    public void VerificationFailureIsReportedAndJournaled()
+    {
+        var entry = TestData.Entry("Stubborn");
+        var provider = new FakeStartupProvider(entry) { IgnoreChanges = true };
+        var journal = new InMemoryJournal();
+        var executor = new ChangeExecutor([provider], journal, TimeProvider.System);
+
+        var result = executor.SetState(entry, false);
+
+        Assert.IsFalse(result.Success);
+        Assert.AreEqual(ChangeStatus.Failed, JournalView.LatestPerChange(journal.ReadAll())[0].Status);
+        Assert.IsNotNull(result.Message);
+    }
+
+    [TestMethod]
+    public void TweakApplyAndRevertRestoreRegistryValue()
+    {
+        var tweak = new TweakDefinition(
+            "test-tweak", "Test", "Test tweak", "Test", TweakEvidence.Community, [],
+            TweakRisk.Low, 10240, 99999999, false, false,
+            [new RegistrySet("HKCU", "Software\\Test", "Value", RegistryValueKindKind.DWord, "1")]);
+        var backend = new FakeTweakBackend();
+        backend.Values["HKCU\\Software\\Test\\Value"] = new TweakValue(RegistryValueKindKind.DWord, "0");
+        var journal = new InMemoryJournal();
+        var engine = new TweakEngine(backend, journal, TimeProvider.System);
+
+        Assert.AreEqual(TweakStatus.NotApplied, engine.GetStatus(tweak, 26100));
+
+        var applied = engine.Apply(tweak, 26100);
+        Assert.IsTrue(applied.Success);
+        Assert.AreEqual("1", backend.Values["HKCU\\Software\\Test\\Value"].Data);
+
+        var reverted = engine.Revert(tweak);
+        Assert.IsTrue(reverted.Success);
+        Assert.AreEqual("0", backend.Values["HKCU\\Software\\Test\\Value"].Data);
+    }
+
+    [TestMethod]
+    public void SecurityProtectedTweakIsRefused()
+    {
+        var tweak = new TweakDefinition(
+            "defender-test", "Test", "Test", "Test", TweakEvidence.Community, [],
+            TweakRisk.High, 10240, 99999999, true, false,
+            [new RegistrySet("HKLM", "SOFTWARE\\Policies\\Microsoft\\Windows\\Defender", "DisableAntiSpyware",
+                RegistryValueKindKind.DWord, "1")]);
+        var engine = new TweakEngine(new FakeTweakBackend(), new InMemoryJournal(), TimeProvider.System);
+
+        var result = engine.Apply(tweak, 26100);
+
+        Assert.IsFalse(result.Success);
+        Assert.AreEqual(TweakStatus.NotApplicable, result.Status);
+    }
+
+    [TestMethod]
+    public void EmbeddedCatalogPassesValidation()
+    {
+        var problems = TweakCatalog.FromEmbedded().Validate();
+
+        Assert.AreEqual(0, problems.Count, string.Join(Environment.NewLine, problems));
+    }
+
+    [TestMethod]
+    public void SnapshotComparerFindsNewReEnabledAndRemoved()
+    {
+        var now = DateTimeOffset.UnixEpoch;
+        var previous = new Snapshot(now, [
+            new SnapshotEntry("a", "A", "RunKey", "Enabled"),
+            new SnapshotEntry("b", "B", "RunKey", "Disabled"),
+            new SnapshotEntry("c", "C", "RunKey", "Enabled"),
+        ]);
+        var current = new Snapshot(now, [
+            new SnapshotEntry("b", "B", "RunKey", "Enabled"),
+            new SnapshotEntry("d", "D", "RunKey", "Enabled"),
+        ]);
+
+        var changes = SnapshotComparer.Compare(previous, current);
+
+        Assert.AreEqual(SnapshotChangeKind.ReEnabled, changes.Single(change => change.Entry.Id == "b").Kind);
+        Assert.AreEqual(SnapshotChangeKind.New, changes.Single(change => change.Entry.Id == "d").Kind);
+        Assert.AreEqual(SnapshotChangeKind.Removed, changes.Single(change => change.Entry.Id == "a").Kind);
+    }
+
+    private sealed class FakeStartupProvider : IStartupProvider
+    {
+        private readonly List<StartupEntry> _entries;
+
+        public FakeStartupProvider(params StartupEntry[] entries)
+        {
+            _entries = entries.ToList();
+        }
+
+        public StartupMechanism Mechanism => StartupMechanism.RunKey;
+
+        public bool CanSetState => true;
+
+        public bool IgnoreChanges { get; init; }
+
+        public IReadOnlyList<StartupEntry> Enumerate() => _entries.ToArray();
+
+        public void SetState(string entryId, bool enabled)
+        {
+            if (IgnoreChanges)
+            {
+                return;
+            }
+
+            var index = _entries.FindIndex(entry => entry.Id == entryId);
+            _entries[index] = _entries[index] with
+            {
+                State = enabled ? EntryState.Enabled : EntryState.Disabled,
+            };
+        }
+    }
+
+    private sealed class FakeTweakBackend : ITweakBackend
+    {
+        public Dictionary<string, TweakValue> Values { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+        public TweakValue? ReadRegistry(RegistryTarget target)
+            => Values.GetValueOrDefault(Key(target));
+
+        public void WriteRegistry(RegistryTarget target, TweakValue value) => Values[Key(target)] = value;
+
+        public void DeleteRegistry(RegistryTarget target) => Values.Remove(Key(target));
+
+        public ServiceStartModeKind? ReadServiceStart(string serviceName) => null;
+
+        public void SetServiceStart(string serviceName, ServiceStartModeKind mode)
+        {
+        }
+
+        public uint? ReadPowerSetting(Guid subGroup, Guid setting, bool ac) => null;
+
+        public void WritePowerSetting(Guid subGroup, Guid setting, bool ac, uint value)
+        {
+        }
+
+        private static string Key(RegistryTarget target) => $"{target.Hive}\\{target.KeyPath}\\{target.ValueName}";
+    }
+}

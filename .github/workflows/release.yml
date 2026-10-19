@@ -1,0 +1,110 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build release artifacts
+    runs-on: windows-2025
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore and test
+        run: |
+          dotnet restore SystemCompass.slnx
+          dotnet build SystemCompass.slnx -c Release --no-restore
+          dotnet test tests/SystemCompass.Tests/SystemCompass.Tests.csproj -c Release --no-build
+
+      - name: Publish desktop app (win-x64)
+        run: dotnet publish src/SystemCompass.App -c Release -r win-x64 --self-contained true -o artifacts/win-x64
+
+      - name: Publish desktop app (win-arm64)
+        run: dotnet publish src/SystemCompass.App -c Release -r win-arm64 --self-contained true -o artifacts/win-arm64
+
+      - name: Publish CLI (win-x64)
+        run: dotnet publish src/SystemCompass.Cli -c Release -r win-x64 --self-contained false -o artifacts/cli-win-x64
+
+      - name: Copy third-party licenses
+        shell: pwsh
+        run: |
+          ./scripts/copy-licenses.ps1 -Destination artifacts/win-x64/licenses
+          ./scripts/copy-licenses.ps1 -Destination artifacts/win-arm64/licenses
+          ./scripts/copy-licenses.ps1 -Destination artifacts/cli-win-x64/licenses
+
+      - name: Generate CycloneDX SBOM
+        shell: pwsh
+        run: |
+          dotnet tool install --global CycloneDX --version 6.3.1
+          cyclonedx SystemCompass.slnx -o artifacts/sbom.cdx.json
+
+      - name: Generate checksums
+        shell: pwsh
+        run: |
+          $root = (Resolve-Path artifacts).Path
+          Get-ChildItem artifacts -Recurse -File |
+            Where-Object { $_.Name -ne 'SHA256SUMS.txt' } |
+            ForEach-Object {
+              $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+              $relative = $_.FullName.Substring($root.Length + 1).Replace('\', '/')
+              "$hash  $relative"
+            } |
+            Set-Content -Encoding utf8 artifacts/SHA256SUMS.txt
+          Get-Content artifacts/SHA256SUMS.txt
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: |
+            artifacts/win-x64/SystemCompass.exe
+            artifacts/win-arm64/SystemCompass.exe
+            artifacts/cli-win-x64/syscompass.exe
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-artifacts
+          path: artifacts
+          if-no-files-found: error
+
+  draft-release:
+    name: Create draft release
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-artifacts
+          path: artifacts
+
+      - name: Create draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mapfile -t files < <(find artifacts -type f)
+          gh release create "$GITHUB_REF_NAME" \
+            --draft \
+            --generate-notes \
+            --title "SystemCompass $GITHUB_REF_NAME" \
+            "${files[@]}"
+          echo "Draft release created. Publishing it is a manual step."

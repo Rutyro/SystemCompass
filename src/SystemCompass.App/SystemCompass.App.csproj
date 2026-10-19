@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <RootNamespace>SystemCompass.App</RootNamespace>
+    <AssemblyName>SystemCompass</AssemblyName>
+    <Description>SystemCompass desktop app: startup audit, reversible changes, tweak catalog and redacted reports.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SystemCompass.Windows\SystemCompass.Windows.csproj" />
+    <ProjectReference Include="..\SystemCompass.Cli\SystemCompass.Cli.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <Target Name="CopyElevatedHelper" AfterTargets="Build">
+    <ItemGroup>
+      <ElevatedHelperFiles Include="$(MSBuildThisFileDirectory)..\SystemCompass.Cli\bin\$(Configuration)\net10.0-windows10.0.19041.0\syscompass.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ElevatedHelperFiles)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

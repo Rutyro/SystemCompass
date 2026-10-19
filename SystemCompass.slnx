@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SystemCompass.App/SystemCompass.App.csproj" />
+    <Project Path="src/SystemCompass.Cli/SystemCompass.Cli.csproj" />
+    <Project Path="src/SystemCompass.Core/SystemCompass.Core.csproj" />
+    <Project Path="src/SystemCompass.Windows/SystemCompass.Windows.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SystemCompass.Tests/SystemCompass.Tests.csproj" />
+  </Folder>
+</Solution>

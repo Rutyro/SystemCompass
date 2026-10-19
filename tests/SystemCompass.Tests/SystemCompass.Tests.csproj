@@ -1,0 +1,13 @@
+<Project Sdk="MSTest.Sdk/4.5.1">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <RootNamespace>SystemCompass.Tests</RootNamespace>
+    <EnableMSTestRunner>true</EnableMSTestRunner>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SystemCompass.Core\SystemCompass.Core.csproj" />
+    <ProjectReference Include="..\..\src\SystemCompass.Windows\SystemCompass.Windows.csproj" />
+  </ItemGroup>
+</Project>

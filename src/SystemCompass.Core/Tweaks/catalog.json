@@ -1,0 +1,487 @@
+{
+  "tweaks": [
+    {
+      "id": "show-file-extensions",
+      "title": "Show file extensions",
+      "description": "Makes known file types display their extension in Explorer. Helps spot disguised files.",
+      "category": "Explorer",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "HideFileExt",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "show-hidden-files",
+      "title": "Show hidden files",
+      "description": "Shows hidden files and folders in Explorer. Protected operating-system files stay hidden.",
+      "category": "Explorer",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "Hidden",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "open-explorer-this-pc",
+      "title": "Open Explorer at This PC",
+      "description": "File Explorer opens on This PC instead of Quick Access.",
+      "category": "Explorer",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "LaunchTo",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-menu-show-delay",
+      "title": "Reduce menu show delay",
+      "description": "Lowers the delay before menus open from 400 ms to 20 ms.",
+      "category": "Explorer",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Desktop",
+          "valueName": "MenuShowDelay",
+          "kind": "String",
+          "data": "20"
+        }
+      ]
+    },
+    {
+      "id": "disable-mouse-acceleration",
+      "title": "Turn off mouse acceleration",
+      "description": "Uses raw pointer movement without the pointer-acceleration curve. Changes how pointing feels; revert if you prefer the default.",
+      "category": "Input",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Mouse",
+          "valueName": "MouseSpeed",
+          "kind": "String",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Mouse",
+          "valueName": "MouseThreshold1",
+          "kind": "String",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Mouse",
+          "valueName": "MouseThreshold2",
+          "kind": "String",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "enable-long-paths",
+      "title": "Enable Win32 long paths",
+      "description": "Allows applications that opt in to use paths longer than 260 characters. Microsoft-documented policy.",
+      "category": "System",
+      "evidence": "MicrosoftDocumented",
+      "links": [
+        "https://learn.microsoft.com/windows/win32/fileio/maximum-file-path-limitation"
+      ],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\FileSystem",
+          "valueName": "LongPathsEnabled",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-consumer-features",
+      "title": "Disable Windows consumer features",
+      "description": "Stops automatic installation of suggested apps and consumer content. Microsoft-documented policy.",
+      "category": "Privacy",
+      "evidence": "MicrosoftDocumented",
+      "links": [
+        "https://learn.microsoft.com/windows/client-management/mdm/policy-csp-experience"
+      ],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent",
+          "valueName": "DisableWindowsConsumerFeatures",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-tips",
+      "title": "Disable Windows tips and suggestions",
+      "description": "Turns off Windows suggestion popups and soft landing content for the current user.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "SoftLandingEnabled",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-game-dvr",
+      "title": "Disable background game recording",
+      "description": "Turns off Game DVR background capture. Xbox Game Bar itself is not removed.",
+      "category": "Gaming",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "System\\GameConfigStore",
+          "valueName": "GameDVR_Enabled",
+          "kind": "DWord",
+          "data": "0"
+        },
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "valueName": "AppCaptureEnabled",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-start-web-suggestions",
+      "title": "Disable web suggestions in Start",
+      "description": "Stops Start menu search from sending the query to a web search provider.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Policies\\Microsoft\\Windows\\Explorer",
+          "valueName": "DisableSearchBoxSuggestions",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-advertising-id",
+      "title": "Disable the advertising ID",
+      "description": "Turns off the per-user advertising identifier used by Store apps.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+          "valueName": "Enabled",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-app-launch-tracking",
+      "title": "Disable app launch tracking",
+      "description": "Stops Windows from tracking which applications you start to personalize Start and search.",
+      "category": "Privacy",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "Start_TrackProgs",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "remote-registry-manual",
+      "title": "Set Remote Registry to manual",
+      "description": "The Remote Registry service no longer starts automatically. Local registry access is unaffected.",
+      "category": "Services",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "serviceStartType",
+          "serviceName": "RemoteRegistry",
+          "mode": "Manual"
+        }
+      ]
+    },
+    {
+      "id": "fax-service-manual",
+      "title": "Set Fax service to manual",
+      "description": "The Fax service starts only when a fax-capable application requests it.",
+      "category": "Services",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "serviceStartType",
+          "serviceName": "Fax",
+          "mode": "Manual"
+        }
+      ]
+    },
+    {
+      "id": "disable-windows-error-reporting",
+      "title": "Disable Windows Error Reporting",
+      "description": "Stops crash reports from being collected and queued for upload. Microsoft-documented policy.",
+      "category": "Privacy",
+      "evidence": "MicrosoftDocumented",
+      "links": [
+        "https://learn.microsoft.com/windows/client-management/mdm/policy-csp-errorreporting"
+      ],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting",
+          "valueName": "Disabled",
+          "kind": "DWord",
+          "data": "1"
+        }
+      ]
+    },
+    {
+      "id": "disable-llmnr",
+      "title": "Disable LLMNR",
+      "description": "Turns off Link-Local Multicast Name Resolution, a name-resolution protocol that is commonly abused for credential relay. Domain environments may rely on it.",
+      "category": "Security",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient",
+          "valueName": "EnableMulticast",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-remote-assistance",
+      "title": "Disable Remote Assistance invitations",
+      "description": "Blocks unsolicited Remote Assistance invitations. Other remote-support tools are not affected.",
+      "category": "Security",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKLM",
+          "keyPath": "SYSTEM\\CurrentControlSet\\Control\\Remote Assistance",
+          "valueName": "fAllowToGetHelp",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-transparency",
+      "title": "Disable window transparency",
+      "description": "Turns off the acrylic/transparency effect for the current user.",
+      "category": "Visuals",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "valueName": "EnableTransparency",
+          "kind": "DWord",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "disable-window-animations",
+      "title": "Disable window animations",
+      "description": "Removes minimize and maximize animations. Helps on slow machines and is often preferred for accessibility.",
+      "category": "Visuals",
+      "evidence": "Community",
+      "links": [],
+      "risk": "Low",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": false,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "registrySet",
+          "hive": "HKCU",
+          "keyPath": "Control Panel\\Desktop\\WindowMetrics",
+          "valueName": "MinAnimate",
+          "kind": "String",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "processor-boost-mode-off",
+      "title": "Set processor boost mode to disabled",
+      "description": "Sets the documented power-management value that disables CPU boost. Reduces peak performance and heat; revert if you need maximum clocks.",
+      "category": "Power",
+      "evidence": "Unverified",
+      "links": [],
+      "risk": "Medium",
+      "minBuild": 10240,
+      "maxBuild": 99999999,
+      "requiresElevation": true,
+      "requiresReboot": false,
+      "operations": [
+        {
+          "type": "powerSetting",
+          "subGroup": "be337238-0d82-4146-a960-4f3749d470c7",
+          "setting": "45bcc044-d885-43e2-8605-ee0ec6e96b59",
+          "acValue": 0,
+          "dcValue": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+T:System.Net.Http.HttpClient;SystemCompass makes no network requests. See PRIVACY.md.
+T:System.Net.WebRequest;SystemCompass makes no network requests. See PRIVACY.md.
+T:System.Net.Sockets.Socket;SystemCompass makes no network requests. See PRIVACY.md.
+T:System.Net.Dns;SystemCompass makes no network requests. See PRIVACY.md.

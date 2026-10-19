@@ -1,0 +1,136 @@
+<Page
+    x:Class="SystemCompass.App.Views.StartupPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:SystemCompass.App.ViewModels">
+
+    <Grid Padding="32,24,32,24" RowSpacing="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Spacing="4">
+            <TextBlock Text="Startup" Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock
+                Text="Every entry found by the audit. Protected entries cannot be changed. Every change is read back from the system and journaled."
+                Style="{StaticResource BodyTextBlockStyle}"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <Grid Grid.Row="1" ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="170" />
+                <ColumnDefinition Width="210" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox
+                PlaceholderText="Search name, publisher or command"
+                Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <ComboBox Grid.Column="1" SelectedIndex="{x:Bind ViewModel.FilterIndex, Mode=TwoWay}">
+                <ComboBoxItem Content="All categories" />
+                <ComboBoxItem Content="Disable recommended" />
+                <ComboBoxItem Content="Optional" />
+                <ComboBoxItem Content="Unclear" />
+                <ComboBoxItem Content="Keep" />
+                <ComboBoxItem Content="Security relevant" />
+            </ComboBox>
+            <ToggleSwitch
+                Grid.Column="2"
+                OnContent="System entries shown"
+                OffContent="System entries hidden"
+                IsOn="{x:Bind ViewModel.IncludeSystem, Mode=TwoWay}" />
+            <Button Grid.Column="3" Content="Refresh" Command="{x:Bind ViewModel.RefreshCommand}" />
+        </Grid>
+
+        <ListView
+            Grid.Row="2"
+            ItemsSource="{x:Bind ViewModel.Entries, Mode=OneWay}"
+            SelectionMode="None"
+            HorizontalAlignment="Stretch"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.HorizontalScrollMode="Disabled">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Padding" Value="0,3" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:StartupEntryViewModel">
+                    <Border Style="{StaticResource CardStyle}">
+                        <Grid ColumnSpacing="14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border
+                                Background="{x:Bind CategoryBrush}"
+                                Width="4"
+                                Height="52"
+                                CornerRadius="2" />
+
+                            <StackPanel Grid.Column="1" Spacing="4" MinWidth="0">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock
+                                        Text="{x:Bind Name}"
+                                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                                        TextTrimming="CharacterEllipsis" />
+                                    <Border
+                                        Style="{StaticResource BadgeStyle}"
+                                        Background="#553B82F6"
+                                        Visibility="{x:Bind ProtectedVisibility}">
+                                        <TextBlock Text="Protected" FontSize="11" />
+                                    </Border>
+                                </StackPanel>
+                                <TextBlock
+                                    Text="{x:Bind MetaLabel}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    TextTrimming="CharacterEllipsis" />
+                                <TextBlock
+                                    Text="{x:Bind Detail}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    TextTrimming="CharacterEllipsis" />
+                                <TextBlock
+                                    Text="{x:Bind ProtectionReason}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Visibility="{x:Bind ReasonVisibility}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Spacing="2">
+                                <TextBlock
+                                    Text="{x:Bind StateLabel, Mode=OneWay}"
+                                    HorizontalAlignment="Right"
+                                    Style="{StaticResource CaptionTextBlockStyle}" />
+                                <ToggleSwitch
+                                    IsOn="{x:Bind IsOn, Mode=OneWay}"
+                                    IsEnabled="{x:Bind CanToggle}"
+                                    OnContent=""
+                                    OffContent=""
+                                    MinWidth="0"
+                                    Toggled="OnToggleToggled" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <InfoBar
+            Grid.Row="3"
+            IsOpen="True"
+            IsClosable="False"
+            Severity="Informational"
+            Message="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" />
+    </Grid>
+</Page>

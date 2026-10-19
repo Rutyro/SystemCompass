@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/Rutyro/SystemCompass/security/advisories/new
+    about: Report vulnerabilities privately. Do not open a public issue.
+  - name: Support and scope
+    url: https://github.com/Rutyro/SystemCompass/blob/main/SUPPORT.md
+    about: Read what is supported before opening an issue.

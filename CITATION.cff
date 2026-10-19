@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use SystemCompass in research, documentation or a derivative project, please cite it as below."
+title: "SystemCompass"
+abstract: "Read-only-first auditing and reversible management of Windows startup entries, with a redacted reporting pipeline and a curated tweak catalog."
+authors:
+  - name: "Rutyro"
+type: software
+license: MIT
+version: 0.1.0
+date-released: 2026-10-19
+keywords:
+  - windows
+  - startup
+  - autostart
+  - audit
+  - registry
+  - services
+  - scheduled-tasks
+  - dotnet
+  - winui

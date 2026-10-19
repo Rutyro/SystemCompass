@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <RootNamespace>SystemCompass.Windows</RootNamespace>
+    <Description>Windows-specific providers for registry, startup folders, scheduled tasks, services, signatures and power settings.</Description>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SystemCompass.Core\SystemCompass.Core.csproj" />
+  </ItemGroup>
+</Project>

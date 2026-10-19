@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>SystemCompass.Core</RootNamespace>
+    <Description>Platform-neutral startup audit, change journal, tweak engine and reporting for SystemCompass.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Startup\rules.json" LogicalName="SystemCompass.Core.Rules.rules.json" />
+    <EmbeddedResource Include="Tweaks\catalog.json" LogicalName="SystemCompass.Core.Tweaks.catalog.json" />
+  </ItemGroup>
+</Project>

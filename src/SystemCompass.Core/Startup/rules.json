@@ -1,0 +1,345 @@
+{
+  "rules": [
+    {
+      "id": "teamviewer-signer",
+      "signerContains": "TeamViewer Germany GmbH",
+      "category": "SecurityRelevant",
+      "risk": "Low",
+      "protected": true,
+      "reason": "Signed remote-support client. Remote access is an explicitly retained capability.",
+      "recovery": "Protected. SystemCompass does not offer changes for this entry."
+    },
+    {
+      "id": "teamviewer-path",
+      "pathPrefix": "C:\\Program Files\\TeamViewer\\",
+      "category": "SecurityRelevant",
+      "risk": "Low",
+      "protected": true,
+      "reason": "Remote-support client components are kept enabled.",
+      "recovery": "Protected. SystemCompass does not offer changes for this entry."
+    },
+    {
+      "id": "windows-security",
+      "namePattern": "SecurityHealth",
+      "category": "SecurityRelevant",
+      "risk": "Low",
+      "protected": true,
+      "reason": "Windows Security notification component.",
+      "recovery": "Protected. Do not disable."
+    },
+    {
+      "id": "edge-update-service",
+      "mechanism": "Service",
+      "locationPrefix": "Service: edgeupdate",
+      "category": "Keep",
+      "risk": "Low",
+      "reason": "Browser update service; keeps the browser patched.",
+      "recovery": "Re-enable through the service manager."
+    },
+    {
+      "id": "nvidia-service",
+      "mechanism": "Service",
+      "namePattern": "NVIDIA*",
+      "category": "Keep",
+      "risk": "Low",
+      "reason": "Graphics driver companion service.",
+      "recovery": "Re-enable through the service manager."
+    },
+    {
+      "id": "office-click-to-run",
+      "mechanism": "Service",
+      "namePattern": "Microsoft Office Click-to-Run*",
+      "category": "Keep",
+      "risk": "Low",
+      "reason": "Office update and streaming service.",
+      "recovery": "Re-enable through the service manager."
+    },
+    {
+      "id": "xbox-services",
+      "mechanism": "Service",
+      "locationPrefix": "Service: GamingServices",
+      "category": "Keep",
+      "risk": "Low",
+      "reason": "Xbox and Store gaming infrastructure.",
+      "recovery": "Re-enable through the service manager."
+    },
+    {
+      "id": "wsl-service",
+      "mechanism": "Service",
+      "namePattern": "WSL Service",
+      "category": "Keep",
+      "risk": "Low",
+      "reason": "Windows Subsystem for Linux service.",
+      "recovery": "Re-enable through the service manager."
+    },
+    {
+      "id": "sql-vss-writer",
+      "mechanism": "Service",
+      "namePattern": "SQL Server VSS Writer",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Backup helper; needed only while SQL Server backups run.",
+      "recovery": "Re-enable through the service manager."
+    },
+    {
+      "id": "wallpaper-engine-service",
+      "mechanism": "Service",
+      "namePattern": "Wallpaper Engine*",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Wallpaper rendering service; not required for the desktop to work.",
+      "recovery": "Re-enable through the service manager."
+    },
+    {
+      "id": "apple-mobile-device",
+      "mechanism": "Service",
+      "namePattern": "Apple Mobile Device*",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Required only when an Apple device is connected.",
+      "recovery": "Re-enable through the service manager."
+    },
+    {
+      "id": "logitech-updater-service",
+      "mechanism": "Service",
+      "namePattern": "LGHUB Updater*",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Peripheral updater; device input does not depend on it at startup.",
+      "recovery": "Re-enable through the service manager."
+    },
+    {
+      "id": "agent-mission-control",
+      "namePattern": "Agent Mission Control",
+      "mechanism": "ScheduledTask",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "User-created logon task.",
+      "recovery": "Re-enable in Task Scheduler."
+    },
+    {
+      "id": "light-host",
+      "namePattern": "Light Host*",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Application starts at sign-in; can start on demand.",
+      "recovery": "Re-enable in Task Manager."
+    },
+    {
+      "id": "driver-store-service",
+      "mechanism": "Service",
+      "pathPrefix": "C:\\Windows\\System32\\DriverStore\\",
+      "category": "SystemCritical",
+      "risk": "High",
+      "protected": true,
+      "reason": "Device driver service installed by a hardware vendor.",
+      "recovery": "Protected. Change only through the device vendor tooling."
+    },
+    {
+      "id": "system32-service",
+      "mechanism": "Service",
+      "pathPrefix": "C:\\Windows\\System32\\",
+      "category": "SystemCritical",
+      "risk": "High",
+      "protected": true,
+      "reason": "Windows system service.",
+      "recovery": "Protected. Do not change."
+    },
+    {
+      "id": "windows-platform-tasks",
+      "mechanism": "ScheduledTask",
+      "locationPrefix": "\\Microsoft\\",
+      "category": "SystemCritical",
+      "risk": "High",
+      "protected": true,
+      "reason": "Task registered by Windows itself.",
+      "recovery": "Protected. Manage through Windows settings if needed."
+    },
+    {
+      "id": "winlogon",
+      "mechanism": "Winlogon",
+      "category": "SystemCritical",
+      "risk": "High",
+      "protected": true,
+      "reason": "Winlogon controls the user shell at sign-in.",
+      "recovery": "Protected. Do not change."
+    },
+    {
+      "id": "ctfmon",
+      "namePattern": "ctfmon",
+      "category": "Keep",
+      "risk": "Low",
+      "reason": "Text input and language bar host.",
+      "recovery": "Re-enable in Task Manager."
+    },
+    {
+      "id": "realtek-audio",
+      "namePattern": "RtkAudUService*",
+      "category": "Keep",
+      "risk": "Low",
+      "reason": "Audio driver companion service.",
+      "recovery": "Re-enable in Task Manager."
+    },
+    {
+      "id": "edge-update",
+      "namePattern": "MicrosoftEdgeUpdate*",
+      "category": "Keep",
+      "risk": "Low",
+      "reason": "Keeps the browser patched; security updates.",
+      "recovery": "Re-enable in Task Scheduler."
+    },
+    {
+      "id": "nvidia-update",
+      "namePattern": "Nv*Update*",
+      "category": "Keep",
+      "risk": "Low",
+      "reason": "Driver update check for the graphics device.",
+      "recovery": "Re-enable in Task Scheduler."
+    },
+    {
+      "id": "skype-for-business",
+      "namePattern": "Lync",
+      "category": "DisableRecommended",
+      "risk": "Low",
+      "reason": "Legacy chat client auto-starts with the user session.",
+      "recovery": "Re-enable in Task Manager."
+    },
+    {
+      "id": "brave-autolaunch",
+      "namePattern": "GoogleChromeAutoLaunch_*",
+      "category": "DisableRecommended",
+      "risk": "Low",
+      "reason": "Browser background auto-launch with no visible window.",
+      "recovery": "Re-enable in Task Manager."
+    },
+    {
+      "id": "lightshot-updater",
+      "pathPrefix": "C:\\Program Files (x86)\\Skillbrains\\",
+      "category": "DisableRecommended",
+      "risk": "Low",
+      "reason": "Screenshot tool updater; can run on demand.",
+      "recovery": "Re-enable in Task Manager."
+    },
+    {
+      "id": "ubisoft-background-update",
+      "namePattern": "Ubisoft Connect Background Update",
+      "mechanism": "ScheduledTask",
+      "category": "DisableRecommended",
+      "risk": "Low",
+      "reason": "Launcher background update task.",
+      "recovery": "Re-enable in Task Scheduler."
+    },
+    {
+      "id": "awcc-update",
+      "namePattern": "AWCC\\Update",
+      "mechanism": "ScheduledTask",
+      "category": "DisableRecommended",
+      "risk": "Low",
+      "reason": "Vendor updater scheduled task.",
+      "recovery": "Re-enable in Task Scheduler."
+    },
+    {
+      "id": "jetbrains-toolbox",
+      "namePattern": "JetBrains Toolbox",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Developer tool launcher; not required at sign-in.",
+      "recovery": "Re-enable in Task Manager."
+    },
+    {
+      "id": "medal",
+      "namePattern": "Medal",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Game clipping overlay; starts on demand.",
+      "recovery": "Re-enable in Task Manager."
+    },
+    {
+      "id": "ollama",
+      "namePattern": "Ollama*",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Local model server; start manually when needed.",
+      "recovery": "Re-enable in Task Manager."
+    },
+    {
+      "id": "remote-access-parsec",
+      "namePattern": "*Parsec*",
+      "category": "SecurityRelevant",
+      "risk": "Medium",
+      "protected": true,
+      "reason": "Remote-access software. Disabling may remove remote control.",
+      "recovery": "Change only after confirming remote access is not needed."
+    },
+    {
+      "id": "remote-access-radmin",
+      "namePattern": "*Radmin*",
+      "category": "SecurityRelevant",
+      "risk": "Medium",
+      "protected": true,
+      "reason": "Remote-access software. Disabling may remove remote control.",
+      "recovery": "Change only after confirming remote access is not needed."
+    },
+    {
+      "id": "remote-access-zerotier",
+      "namePattern": "*ZeroTier*",
+      "category": "SecurityRelevant",
+      "risk": "Medium",
+      "protected": true,
+      "reason": "Virtual network component used for remote access.",
+      "recovery": "Change only after confirming remote access is not needed."
+    },
+    {
+      "id": "remote-access-tailscale",
+      "namePattern": "*Tailscale*",
+      "category": "SecurityRelevant",
+      "risk": "Medium",
+      "protected": true,
+      "reason": "Virtual network component used for remote access.",
+      "recovery": "Change only after confirming remote access is not needed."
+    },
+    {
+      "id": "remote-access-openvpn",
+      "namePattern": "*OpenVPN*",
+      "category": "SecurityRelevant",
+      "risk": "Medium",
+      "protected": true,
+      "reason": "VPN component used for remote access.",
+      "recovery": "Change only after confirming remote access is not needed."
+    },
+    {
+      "id": "remote-access-sunshine",
+      "namePattern": "*Sunshine*",
+      "category": "SecurityRelevant",
+      "risk": "Medium",
+      "protected": true,
+      "reason": "Game-streaming host service.",
+      "recovery": "Change only after confirming remote streaming is not needed."
+    },
+    {
+      "id": "process-lasso",
+      "namePattern": "*Process Lasso*",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Process management tool; keep if its scheduling rules are used.",
+      "recovery": "Re-enable in Task Manager."
+    },
+    {
+      "id": "rtss",
+      "namePattern": "RTSS",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Frame-rate limiter overlay; keep if used for frame capping.",
+      "recovery": "Re-enable in Task Scheduler."
+    },
+    {
+      "id": "timer-resolution",
+      "namePattern": "Set Timer Resolution*",
+      "mechanism": "Service",
+      "category": "Optional",
+      "risk": "Low",
+      "reason": "Timer resolution helper. SystemCompass does not claim a performance effect.",
+      "recovery": "Set the service back to Automatic."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+name: Feature request
+description: Propose a capability or improvement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        SystemCompass accepts features that are reversible, auditable and do not weaken Windows security.
+        Proposals that disable Defender, VBS/HVCI, mitigations or Windows Update will be declined.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is difficult today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the behaviour, the Windows interface involved and how the change can be reverted.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Startup mechanism
+        - Classification rule
+        - Change or rollback
+        - Tweak catalog
+        - Report and privacy
+        - Desktop app
+        - CLI
+        - Documentation
+        - Build and release
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and reversibility
+      description: What can fail, and how is the previous state restored?
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: The proposal does not weaken a Windows security feature.
+          required: true
+        - label: I am willing to test the change on a non-production machine.
+          required: true

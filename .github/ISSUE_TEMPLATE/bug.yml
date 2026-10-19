@@ -1,0 +1,70 @@
+name: Bug report
+description: Report a reproducible defect in SystemCompass
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not paste unredacted reports, registry exports, journal files or screenshots containing personal data.
+        Security vulnerabilities must be reported privately as described in SECURITY.md, not in a public issue.
+  - type: input
+    id: version
+    attributes:
+      label: SystemCompass version
+      description: Release name or commit id.
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows edition and build
+      placeholder: "Windows 11 Pro 24H2, build 26100.1234"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Startup audit
+        - Changing an entry
+        - Journal or rollback
+        - Control Center tweak
+        - Report or redaction
+        - Desktop app
+        - CLI
+        - Build or CI
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact command or click path.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Output with personal data removed.
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I removed personal and confidential data from this report.
+          required: true
+        - label: This is not a security vulnerability.
+          required: true
+        - label: I searched existing issues for duplicates.
+          required: true

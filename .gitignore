@@ -1,0 +1,40 @@
+# Build output
+bin/
+obj/
+artifacts/
+*.user
+*.suo
+.vs/
+*.binlog
+
+# Test and coverage output
+TestResults/
+coverage/
+*.coverage
+*.trx
+
+# Local data produced by SystemCompass (journal, snapshots, exports)
+*.jsonl
+reports/
+snapshots/
+exports/
+intents/
+
+# Local configuration and secrets
+.env
+.env.*
+*.local.json
+secrets.*
+
+# OS noise
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Personal artifacts must never be committed
+personal/
+*.reg
+*.pfx
+*.p12
+*.pem
+*.key
