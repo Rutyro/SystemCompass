@@ -50,7 +50,7 @@ A tweak is a declarative JSON object embedded in the assembly (`Tweaks/catalog.j
 | `serviceStartType` | serviceName, mode | `sc config <name> start= <mode>` |
 | `powerSetting` | subGroup, setting, acValue, dcValue | Active power scheme via PowrProf |
 | `tcpGlobal` | name, value | `netsh int tcp set global <name>=<value>`; names are allow-listed |
-| `scheduledTask` | taskPath, enabled | `schtasks /Change /TN <path> /ENABLE|/DISABLE`; protected task folders are denied |
+| `scheduledTask` | taskPath, enabled | `schtasks /Change /TN <path>` with `/ENABLE` or `/DISABLE`; protected task folders are denied |
 
 Supported registry kinds: `String`, `ExpandString`, `DWord`, `QWord`, `Binary` (hex string).
 

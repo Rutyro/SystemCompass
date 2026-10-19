@@ -10,12 +10,12 @@ Shipped in this repository:
 - Verified, journaled, reversible changes
 - Snapshots and diff detection
 - Curated tweak catalog with evidence levels and deny-list
-- Redacted reports, CLI JSON, WinUI app, demo mode
+- Redacted reports, CLI JSON, WPF (AvalonDock) app, demo mode
 - CI, security and documentation workflows
 
 ## 0.2.0 — depth and confidence
 
-- UI automation tests for the four main pages
+- UI automation tests for the six dockable documents
 - Snapshot comparison view in the app, with new/re-enabled highlighting
 - Export of a before/after comparison report
 - Additional provider tests with captured fixture XML and registry data

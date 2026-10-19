@@ -15,8 +15,8 @@
 | `SystemCompass.Core` | `net10.0` | Models, classifier, change executor, journal, snapshots, tweak engine, redaction, report rendering, demo data |
 | `SystemCompass.Windows` | `net10.0-windows10.0.19041.0` | Registry, startup folders, scheduled tasks, services, Winlogon, Authenticode, power APIs, diagnostics, composition root |
 | `SystemCompass.Cli` | `net10.0-windows10.0.19041.0` | `syscompass.exe`, JSON output, elevated helper |
-| `SystemCompass.App` | `net10.0-windows10.0.19041.0` | WinUI 3 desktop application, view models, demo mode |
-| `SystemCompass.Tests` | `net10.0` | Unit tests with fakes; read-only integration tests |
+| `SystemCompass.App` | `net10.0-windows10.0.19041.0` | WPF (AvalonDock) desktop application, view models, demo mode |
+| `SystemCompass.Tests` | `net10.0-windows10.0.19041.0` | Unit tests with fakes; read-only integration tests |
 
 Dependencies point in one direction: `App`/`Cli` → `Windows` → `Core`.
 
@@ -26,7 +26,7 @@ Dependencies point in one direction: `App`/`Cli` → `Windows` → `Core`.
 flowchart TB
     subgraph App
         VM[ViewModels]
-        VIEW[WinUI pages]
+        VIEW[WPF views]
     end
     subgraph Cli
         CMD[Command handlers]

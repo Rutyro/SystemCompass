@@ -1,0 +1,54 @@
+<UserControl
+    x:Class="SystemCompass.App.Views.StartupMapView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+
+    <Grid Margin="22,18,22,18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Startup map" Style="{StaticResource PageTitle}" />
+            <TextBlock Text="A zoomable diagram of every mechanism and the entries it carries. Use the mouse wheel or the slider to zoom; drag to pan; the loupe magnifies the area under the pointer."
+                       Style="{StaticResource Caption}" Margin="0,3,0,0" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Padding="12,8" Margin="0,12,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="220" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Zoom" Style="{StaticResource Caption}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                <Slider Grid.Column="1" Minimum="0.3" Maximum="2.5"
+                        Value="{Binding Scale, ElementName=MapZoom, Mode=TwoWay}" VerticalAlignment="Center" />
+                <Button Grid.Column="2" Content="Fit" Click="OnFit" Style="{StaticResource SoftButton}" Margin="10,0,0,0" />
+                <TextBlock Grid.Column="4" Text="Drag to pan · wheel to zoom" Style="{StaticResource Faint}"
+                           VerticalAlignment="Center" Margin="10,0,0,0" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource CardBorder}" Padding="0" ClipToBounds="True">
+            <Grid>
+                <xctk:Zoombox x:Name="MapZoom" Background="#15151A" MinScale="0.3" MaxScale="2.5"
+                              ZoomOn="Content" PanDistance="1.4" KeepContentInBounds="False">
+                    <Canvas x:Name="MapCanvas" Width="1400" Height="900" Background="Transparent" />
+                </xctk:Zoombox>
+                <xctk:Magnifier x:Name="Loupe" Width="130" Height="130" Radius="62" ZoomFactor="2"
+                                Target="{Binding ElementName=MapCanvas}" HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom" Margin="0,0,12,12" IsHitTestVisible="False" />
+            </Grid>
+        </Border>
+
+        <TextBlock Grid.Row="3" Text="Click a node to show it in the Properties pane. The map is generated from the same audit as the Startup list."
+                   Style="{StaticResource Faint}" Margin="0,8,0,0" />
+    </Grid>
+</UserControl>

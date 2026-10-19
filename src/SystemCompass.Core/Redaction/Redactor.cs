@@ -22,10 +22,22 @@ public sealed class RedactionOptions
 public sealed partial class Redactor
 {
     private readonly RedactionOptions _options;
+    private readonly List<string> _extraLiterals;
 
     public Redactor(RedactionOptions options)
     {
         _options = options;
+        _extraLiterals = [.. options.ExtraLiterals];
+    }
+
+    /// <summary>Adds a literal that every subsequent export must redact.</summary>
+    public void AddLiteral(string literal)
+    {
+        if (!string.IsNullOrWhiteSpace(literal)
+            && !_extraLiterals.Contains(literal, StringComparer.OrdinalIgnoreCase))
+        {
+            _extraLiterals.Add(literal);
+        }
     }
 
     public static Redactor CreateForCurrentUser()
@@ -47,7 +59,7 @@ public sealed partial class Redactor
 
         var text = input;
 
-        foreach (var literal in _options.ExtraLiterals)
+        foreach (var literal in _extraLiterals)
         {
             if (!string.IsNullOrEmpty(literal))
             {

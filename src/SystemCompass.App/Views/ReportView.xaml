@@ -1,0 +1,96 @@
+<UserControl
+    x:Class="SystemCompass.App.Views.ReportView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+
+    <Grid Margin="22,18,22,18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Report" Style="{StaticResource PageTitle}" />
+                <Border Style="{StaticResource ChipBorder}" Background="#2234D399" Margin="12,0,0,0">
+                    <TextBlock Text="REDACTED EXPORT" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource AccentGreenBrush}" />
+                </Border>
+            </StackPanel>
+            <TextBlock Text="Diagnostics and startup summary. Exports are redacted: user names, profile paths, machine names, SIDs and non-system drive paths never leave the app."
+                       Style="{StaticResource Caption}" Margin="0,3,0,0" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Padding="14,10" Margin="0,12,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="120" />
+                </Grid.ColumnDefinitions>
+                <Button Content="Generate" Command="{Binding GenerateCommand}" Style="{StaticResource AccentButton}" />
+                <Button Grid.Column="1" Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource SoftButton}" Margin="6,0,0,0" />
+                <Button Grid.Column="2" Content="Copy" Command="{Binding CopyCommand}" Style="{StaticResource SoftButton}" Margin="6,0,0,0" />
+                <Button Grid.Column="3" Content="Print" Click="OnPrint" Style="{StaticResource SoftButton}" Margin="6,0,0,0" />
+                <ToggleButton Grid.Column="4" Content="Demo data" IsChecked="{Binding UseDemo}" Margin="10,0,0,0"
+                              Click="OnDemoToggled"
+                              Background="{StaticResource SubtleBrush}" Foreground="#E4E4E7" Padding="10,5" />
+                <TextBlock Grid.Column="6" Text="Zoom" Style="{StaticResource Caption}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <Slider Grid.Column="7" Minimum="0.6" Maximum="1.8" VerticalAlignment="Center"
+                        Value="{Binding Zoom, ElementName=Preview, Mode=TwoWay}" />
+            </Grid>
+        </Border>
+
+        <xctk:BusyIndicator Grid.Row="2" IsBusy="{Binding IsBusy}" BusyContent="Generating redacted report...">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="340" />
+                </Grid.ColumnDefinitions>
+                <Border Style="{StaticResource CardBorder}" Padding="0">
+                    <FlowDocumentScrollViewer x:Name="Preview" Document="{Binding PreviewDocument}"
+                                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                              Background="Transparent" BorderThickness="0" />
+                </Border>
+                <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="{StaticResource CardBorderBrush}" />
+                <Border Grid.Column="2" Style="{StaticResource CardBorder}" Padding="12">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Reviewer notes" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Grid.Row="1" Text="Notes are appended to the saved Markdown only; the redacted preview stays unchanged."
+                                   Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="0,2,0,8" />
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <xctk:RichTextBoxFormatBar Target="{Binding ElementName=NotesBox}" />
+                            <RichTextBox x:Name="NotesBox" Grid.Row="1" AcceptsReturn="True" IsUndoEnabled="True"
+                                         Background="{StaticResource SubtleBrush}" Foreground="#FAFAFA"
+                                         BorderBrush="{StaticResource CardBorderBrush}" Padding="8" />
+                        </Grid>
+                        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,8,0,0">
+                            <Button Content="Apply notes" Click="OnApplyNotes" Style="{StaticResource SoftButton}" Margin="0,0,6,0" />
+                            <Button Content="Clear" Click="OnClearNotes" Style="{StaticResource SoftButton}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </xctk:BusyIndicator>
+
+        <TextBlock Grid.Row="3" Text="{Binding StatusMessage}" Style="{StaticResource Caption}" Margin="0,8,0,0" />
+    </Grid>
+</UserControl>

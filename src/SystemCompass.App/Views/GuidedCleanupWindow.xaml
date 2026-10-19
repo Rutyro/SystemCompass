@@ -1,0 +1,102 @@
+<Window
+    x:Class="SystemCompass.App.Views.GuidedCleanupWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Title="Guided cleanup"
+    Width="760"
+    Height="600"
+    WindowStartupLocation="CenterOwner"
+    ShowInTaskbar="False">
+
+    <xctk:Wizard
+        x:Name="CleanupWizard"
+        Background="{StaticResource PageBrush}"
+        Foreground="#F4F4F5"
+        BorderBrush="{StaticResource CardBorderBrush}"
+        FinishButtonContent="Apply selected"
+        FinishButtonClosesWindow="True"
+        CancelButtonContent="Cancel"
+        CanCancel="True"
+        Finish="OnFinish">
+
+        <xctk:WizardPage
+            Background="{StaticResource PageBrush}"
+            Foreground="#F4F4F5"
+            ExteriorPanelBackground="{StaticResource CardBrush}"
+            BorderBrush="{StaticResource CardBorderBrush}"
+            Title="Review recommendations"
+            Description="Choose the tweaks you want to apply. The list contains only tweaks that are not fully applied and are rated Low or Medium risk. High-risk entries stay in the Control Center."
+            BackButtonVisibility="Collapsed"
+            CanFinish="False">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Each selected tweak captures its previous value and is verified after the write. You can revert it later from the journal."
+                           Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="0,0,0,8" />
+                <xctk:CheckListBox Grid.Row="1" ItemsSource="{Binding Candidates}"
+                                   SelectedItemsOverride="{Binding Selected}"
+                                   BorderBrush="{StaticResource CardBorderBrush}" Background="{StaticResource CardBrush}">
+                    <xctk:CheckListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="2,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Category}" Style="{StaticResource Caption}" />
+                                </StackPanel>
+                                <Border Grid.Column="1" Style="{StaticResource BadgeBorder}" Background="{Binding RiskBrush}">
+                                    <TextBlock Text="{Binding RiskLabel}" FontSize="10" Foreground="White" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </xctk:CheckListBox.ItemTemplate>
+                </xctk:CheckListBox>
+            </Grid>
+        </xctk:WizardPage>
+
+        <xctk:WizardPage
+            Background="{StaticResource PageBrush}"
+            Foreground="#F4F4F5"
+            ExteriorPanelBackground="{StaticResource CardBrush}"
+            BorderBrush="{StaticResource CardBorderBrush}"
+            Title="Review the operations"
+            Description="This is the exact list that will be written. Nothing is changed until you press Apply selected."
+            CanFinish="True"
+            NextButtonVisibility="Collapsed">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Summary}" Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="0,0,0,8" />
+                <ListBox Grid.Row="1" ItemsSource="{Binding Selected}" Background="Transparent" BorderThickness="0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource CardBorder}" Padding="10" Margin="0,0,0,6">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                    <ItemsControl ItemsSource="{Binding OperationLines}" Margin="0,4,0,0">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}" Style="{StaticResource Mono}" TextWrapping="Wrap" />
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <CheckBox Grid.Row="2" x:Name="ConfirmBox" Content="I reviewed the operations and want to apply them."
+                          Margin="0,10,0,0" Checked="OnConfirmChanged" Unchecked="OnConfirmChanged" />
+            </Grid>
+        </xctk:WizardPage>
+    </xctk:Wizard>
+</Window>

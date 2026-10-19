@@ -8,22 +8,10 @@ The build uses the following packages. Release artifacts bundle their runtime co
 
 | Package | Version | License |
 |---|---|---|
-| Microsoft.WindowsAppSDK | 2.5.1 | Microsoft Software License Terms |
-| Microsoft.WindowsAppSDK.AI | 2.5.5 | Microsoft Software License Terms |
-| Microsoft.WindowsAppSDK.Base | 2.0.4 | Microsoft Software License Terms |
-| Microsoft.WindowsAppSDK.DWrite | 2.1.0 | Microsoft Software License Terms |
-| Microsoft.WindowsAppSDK.Foundation | 2.3.12 | Microsoft Software License Terms |
-| Microsoft.WindowsAppSDK.InteractiveExperiences | 2.1.9 | Microsoft Software License Terms |
-| Microsoft.WindowsAppSDK.ML | 2.1.94 | Microsoft Software License Terms |
-| Microsoft.WindowsAppSDK.Runtime | 2.5.1 | Microsoft Software License Terms |
-| Microsoft.WindowsAppSDK.Search | 2.5.5 | Microsoft Software License Terms |
-| Microsoft.WindowsAppSDK.Widgets | 2.0.5 | Microsoft Software License Terms |
-| Microsoft.WindowsAppSDK.WinUI | 2.3.9 | Microsoft Software License Terms |
-| Microsoft.Web.WebView2 | 1.0.3719.77 | Microsoft BSD-style license |
-| Microsoft.Windows.AI.MachineLearning | 2.1.74 | Microsoft Software License Terms |
-| Microsoft.Windows.SDK.BuildTools | 10.0.28000.2705 | Microsoft software license terms |
-| Microsoft.Windows.SDK.BuildTools.MSIX | 1.7.251221100 | Microsoft SDK license terms |
-| System.Numerics.Tensors | 9.0.0 | MIT |
+| DotNetProjects.Extended.Wpf.Toolkit | 5.0.129 | Ms-PL |
+| Dirkster.AvalonDock | 5.0.1 | Ms-PL |
+| Dirkster.AvalonDock.Themes.VS2013 | 5.0.1 | Ms-PL |
+| Dirkster.AvalonDock.Serializer.Xml | 5.0.1 | Ms-PL |
 | CommunityToolkit.Mvvm | 8.4.2 | MIT |
 | System.CommandLine | 2.0.13 | MIT |
 
@@ -36,9 +24,44 @@ These packages are not redistributed in release artifacts.
 | MSTest.Sdk | 4.5.1 | MIT |
 | Microsoft.CodeAnalysis.BannedApiAnalyzers | 5.6.0 | MIT |
 
-## Microsoft license files
+## Microsoft Public License (Ms-PL)
 
-The full Microsoft license texts are included in the NuGet packages and are copied into `licenses/` for published builds. The Microsoft components are redistributed under their own terms, not under the MIT license of this project.
+The Extended WPF Toolkit fork and AvalonDock packages are licensed under the Microsoft Public License. The full text is copied into `licenses/Ms-PL.txt` for published builds and is reproduced below.
+
+```text
+Ms-PL
+Microsoft Public License (Ms-PL)
+
+This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.
+
+1. Definitions
+
+The terms "reproduce," "reproduction," "derivative works," and "distribution" have the same meaning here as under U.S. copyright law.
+
+A "contribution" is the original software, or any additions or changes to the software.
+
+A "contributor" is any person that distributes its contribution under this license.
+
+"Licensed patents" are a contributor's patent claims that read directly on its contribution.
+
+2. Grant of Rights
+
+(A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.
+
+(B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.
+
+3. Conditions and Limitations
+
+(A) No Trademark License- This license does not grant you rights to use any contributors' name, logo, or trademarks.
+
+(B) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically.
+
+(C) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software.
+
+(D) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license.
+
+(E) The software is licensed "as-is." You bear the risk of using it. The contributors give no express warranties, guarantees or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.
+```
 
 ## Trademarks
 

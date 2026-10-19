@@ -1,37 +1,38 @@
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.UI.Xaml.Media;
 using SystemCompass.Core.Demo;
 using SystemCompass.Core.Startup;
 using SystemCompass.Windows;
-using Windows.UI;
+using WinColor = System.Windows.Media.Color;
 
 namespace SystemCompass.App.ViewModels;
 
 public sealed partial class StartupEntryViewModel : ObservableObject
 {
-    private static readonly SolidColorBrush RecommendBrush = new(Color.FromArgb(255, 180, 83, 9));
-    private static readonly SolidColorBrush OptionalBrush = new(Color.FromArgb(255, 37, 99, 235));
-    private static readonly SolidColorBrush KeepBrush = new(Color.FromArgb(255, 21, 128, 61));
-    private static readonly SolidColorBrush SecurityBrush = new(Color.FromArgb(255, 124, 58, 237));
-    private static readonly SolidColorBrush NeutralBrush = new(Color.FromArgb(255, 107, 114, 128));
+    private static readonly SolidColorBrush RecommendBrush = new(WinColor.FromRgb(0xB4, 0x53, 0x09));
+    private static readonly SolidColorBrush OptionalBrush = new(WinColor.FromRgb(0x25, 0x63, 0xEB));
+    private static readonly SolidColorBrush KeepBrush = new(WinColor.FromRgb(0x15, 0x80, 0x3D));
+    private static readonly SolidColorBrush SecurityBrush = new(WinColor.FromRgb(0x7C, 0x3A, 0xED));
+    private static readonly SolidColorBrush NeutralBrush = new(WinColor.FromRgb(0x6B, 0x72, 0x80));
+    private static readonly SolidColorBrush RiskHighBrush = new(WinColor.FromRgb(0xDC, 0x26, 0x26));
 
     private EntryState _state;
-    private bool _isOn;
+    private ImageSource? _icon;
 
     public StartupEntryViewModel(StartupEntry entry, bool canChange)
     {
         Entry = entry;
         _state = entry.State;
-        _isOn = entry.State == EntryState.Enabled;
         CanToggle = canChange;
     }
 
     public StartupEntry Entry { get; }
 
     public string Id => Entry.Id;
-
     public string Name => Entry.Name;
 
     public string StateLabel => _state switch
@@ -41,15 +42,17 @@ public sealed partial class StartupEntryViewModel : ObservableObject
         _ => "Unknown",
     };
 
-    public bool IsOn
-    {
-        get => _isOn;
-        set => SetProperty(ref _isOn, value);
-    }
+    public string ActionLabel => _state == EntryState.Enabled ? "Disable" : "Enable";
+
+    public bool IsOn => _state == EntryState.Enabled;
 
     public bool CanToggle { get; }
 
+    public Visibility ToggleVisibility => CanToggle ? Visibility.Visible : Visibility.Collapsed;
+
     public bool IsProtected => Entry.IsProtected;
+
+    public ImageSource? Icon => _icon ??= IconLoader.Get(Entry.ResolvedPath);
 
     public string CategoryLabel => Entry.Assessment.Category switch
     {
@@ -60,6 +63,8 @@ public sealed partial class StartupEntryViewModel : ObservableObject
         EntryCategory.Keep => "Keep",
         _ => "Unclear",
     };
+
+    public string RiskLabel => Entry.Assessment.Risk.ToString();
 
     public string MechanismLabel => Entry.Mechanism switch
     {
@@ -80,23 +85,16 @@ public sealed partial class StartupEntryViewModel : ObservableObject
         _ => "Signature unknown",
     };
 
-    public string Detail => string.IsNullOrWhiteSpace(Entry.CommandLine)
-        ? Entry.Location
-        : Entry.CommandLine;
+    public string Detail => string.IsNullOrWhiteSpace(Entry.CommandLine) ? Entry.Location : Entry.CommandLine;
 
     public string MetaLabel => $"{CategoryLabel} · {MechanismLabel} · {SignatureLabel}";
 
-    public string ProtectionReason => Entry.IsProtected
-        ? Entry.Assessment.Reason
-        : string.Empty;
+    public string ProtectionReason => Entry.IsProtected ? Entry.Assessment.Reason : string.Empty;
 
-    public Microsoft.UI.Xaml.Visibility ProtectedVisibility =>
-        IsProtected ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+    public Visibility ProtectedVisibility => IsProtected ? Visibility.Visible : Visibility.Collapsed;
 
-    public Microsoft.UI.Xaml.Visibility ReasonVisibility =>
-        string.IsNullOrWhiteSpace(ProtectionReason)
-            ? Microsoft.UI.Xaml.Visibility.Collapsed
-            : Microsoft.UI.Xaml.Visibility.Visible;
+    public Visibility ReasonVisibility =>
+        string.IsNullOrWhiteSpace(ProtectionReason) ? Visibility.Collapsed : Visibility.Visible;
 
     public Brush CategoryBrush => Entry.Assessment.Category switch
     {
@@ -107,12 +105,16 @@ public sealed partial class StartupEntryViewModel : ObservableObject
         _ => NeutralBrush,
     };
 
+    public Brush RiskBrush => Entry.Assessment.Risk is RiskLevel.High or RiskLevel.Critical
+        ? RiskHighBrush
+        : CategoryBrush;
+
     public string BuildDialogText(bool desiredState) =>
         $"Entry: {Name}{Environment.NewLine}"
         + $"Mechanism: {MechanismLabel} ({Entry.Scope}){Environment.NewLine}"
         + $"Current state: {StateLabel}{Environment.NewLine}"
-        + $"Requested state: {(desiredState ? "Enabled" : "Disabled")}{Environment.NewLine}"
-        + $"{Environment.NewLine}{Entry.Assessment.Reason}{Environment.NewLine}"
+        + $"Requested state: {(desiredState ? "Enabled" : "Disabled")}{Environment.NewLine}{Environment.NewLine}"
+        + $"{Entry.Assessment.Reason}{Environment.NewLine}"
         + (Entry.RequiresElevation
             ? "This change needs administrator rights. Windows will show one confirmation prompt."
             : "This change is journaled and can be rolled back.");
@@ -120,8 +122,9 @@ public sealed partial class StartupEntryViewModel : ObservableObject
     public void ApplyState(EntryState state)
     {
         _state = state;
-        IsOn = state == EntryState.Enabled;
+        OnPropertyChanged(nameof(IsOn));
         OnPropertyChanged(nameof(StateLabel));
+        OnPropertyChanged(nameof(ActionLabel));
     }
 }
 
@@ -130,37 +133,41 @@ public sealed partial class StartupViewModel : ObservableObject
     private readonly SystemServices _services;
     private readonly bool _demo;
     private IReadOnlyList<StartupEntry> _all = [];
+    private IReadOnlyList<StartupEntryViewModel> _items = [];
 
     public StartupViewModel(SystemServices services, bool demo = false)
     {
         _services = services;
         _demo = demo;
+        Entries = [];
         SearchText = string.Empty;
         StatusMessage = string.Empty;
+        TotalCountLabel = "0";
+        EnabledCountLabel = "0";
+        RecommendationCountLabel = "0";
+        ProtectedCountLabel = "0";
+        FilteredCountLabel = "0 shown";
         Refresh();
     }
 
-    public ObservableCollection<StartupEntryViewModel> Entries { get; } = [];
+    public ObservableCollection<StartupEntryViewModel> Entries { get; }
 
-    [ObservableProperty]
-    public partial string SearchText { get; set; }
+    public IReadOnlyList<StartupEntryViewModel> AllItems => _items;
 
-    [ObservableProperty]
-    public partial int FilterIndex { get; set; }
-
-    [ObservableProperty]
-    public partial bool IncludeSystem { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
-
-    [ObservableProperty]
-    public partial string StatusMessage { get; set; }
+    [ObservableProperty] public partial string SearchText { get; set; }
+    [ObservableProperty] public partial int FilterIndex { get; set; }
+    [ObservableProperty] public partial bool IncludeSystem { get; set; }
+    [ObservableProperty] public partial bool IsBusy { get; set; }
+    [ObservableProperty] public partial string StatusMessage { get; set; }
+    [ObservableProperty] public partial string TotalCountLabel { get; set; }
+    [ObservableProperty] public partial string EnabledCountLabel { get; set; }
+    [ObservableProperty] public partial string RecommendationCountLabel { get; set; }
+    [ObservableProperty] public partial string ProtectedCountLabel { get; set; }
+    [ObservableProperty] public partial string FilteredCountLabel { get; set; }
+    [ObservableProperty] public partial StartupEntryViewModel? SelectedEntry { get; set; }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
-
     partial void OnFilterIndexChanged(int value) => ApplyFilter();
-
     partial void OnIncludeSystemChanged(bool value) => ApplyFilter();
 
     [RelayCommand]
@@ -172,11 +179,12 @@ public sealed partial class StartupViewModel : ObservableObject
             _all = _demo
                 ? DemoDataSet.CreateReport(DateTimeOffset.UtcNow, "0.1.0").StartupEntries
                 : _services.Audit.EnumerateAll();
+            _items = _all.Select(entry => new StartupEntryViewModel(
+                entry, !_demo && _services.Audit.CanChange(entry))).ToArray();
             ApplyFilter();
         }
         catch (Exception ex) when (ex is InvalidOperationException
-            or UnauthorizedAccessException
-            or IOException
+            or UnauthorizedAccessException or IOException
             or System.ComponentModel.Win32Exception)
         {
             StatusMessage = $"Audit failed: {ex.Message}";
@@ -187,9 +195,7 @@ public sealed partial class StartupViewModel : ObservableObject
         }
     }
 
-    public async Task<(bool Success, string Message)> SetStateAsync(
-        StartupEntryViewModel item,
-        bool enabled)
+    public async Task<(bool Success, string Message)> SetStateAsync(StartupEntryViewModel item, bool enabled)
     {
         if (!item.CanToggle)
         {
@@ -201,13 +207,11 @@ public sealed partial class StartupViewModel : ObservableObject
             if (item.Entry.RequiresElevation)
             {
                 var elevated = await ElevationHelper.ApplyAsync([(item.Entry.Id, enabled)]);
-                if (!elevated.Success)
+                if (elevated.Success)
                 {
-                    StatusMessage = elevated.Message;
-                    return elevated;
+                    item.ApplyState(enabled ? EntryState.Enabled : EntryState.Disabled);
                 }
 
-                item.ApplyState(enabled ? EntryState.Enabled : EntryState.Disabled);
                 StatusMessage = elevated.Message;
                 return elevated;
             }
@@ -222,8 +226,7 @@ public sealed partial class StartupViewModel : ObservableObject
             return (result.Success, result.Message);
         }
         catch (Exception ex) when (ex is InvalidOperationException
-            or UnauthorizedAccessException
-            or IOException
+            or UnauthorizedAccessException or IOException
             or System.ComponentModel.Win32Exception)
         {
             StatusMessage = ex.Message;
@@ -234,42 +237,45 @@ public sealed partial class StartupViewModel : ObservableObject
     private void ApplyFilter()
     {
         Entries.Clear();
-        IEnumerable<StartupEntry> query = _all;
-
+        IEnumerable<StartupEntryViewModel> query = _items;
         if (!IncludeSystem)
         {
-            query = query.Where(entry => entry.Assessment.Category != EntryCategory.SystemCritical);
+            query = query.Where(item => item.Entry.Assessment.Category != EntryCategory.SystemCritical);
         }
 
         query = FilterIndex switch
         {
-            1 => query.Where(entry => entry.Assessment.Category == EntryCategory.DisableRecommended),
-            2 => query.Where(entry => entry.Assessment.Category == EntryCategory.Optional),
-            3 => query.Where(entry => entry.Assessment.Category == EntryCategory.Unclear),
-            4 => query.Where(entry => entry.Assessment.Category == EntryCategory.Keep),
-            5 => query.Where(entry => entry.Assessment.Category == EntryCategory.SecurityRelevant),
+            1 => query.Where(item => item.Entry.Assessment.Category == EntryCategory.DisableRecommended),
+            2 => query.Where(item => item.Entry.Assessment.Category == EntryCategory.Optional),
+            3 => query.Where(item => item.Entry.Assessment.Category == EntryCategory.Unclear),
+            4 => query.Where(item => item.Entry.Assessment.Category == EntryCategory.Keep),
+            5 => query.Where(item => item.Entry.Assessment.Category == EntryCategory.SecurityRelevant),
             _ => query,
         };
 
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
-            query = query.Where(entry =>
-                entry.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-                || (entry.CommandLine?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false)
-                || (entry.Signature.Signer?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false)
-                || entry.Location.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+            query = query.Where(item =>
+                item.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+                || item.Detail.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+                || item.SignatureLabel.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+                || item.Entry.Location.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
         }
 
-        foreach (var entry in query
-                     .OrderBy(candidate => candidate.Assessment.Category)
-                     .ThenBy(candidate => candidate.Name, StringComparer.OrdinalIgnoreCase))
+        foreach (var item in query
+                     .OrderBy(item => item.Entry.Assessment.Category)
+                     .ThenBy(item => item.Name, StringComparer.OrdinalIgnoreCase))
         {
-            Entries.Add(new StartupEntryViewModel(
-                entry,
-                !_demo && _services.Audit.CanChange(entry)));
+            Entries.Add(item);
         }
 
-        StatusMessage = $"{Entries.Count} shown of {_all.Count} entries · "
-            + $"{_all.Count(entry => entry.Assessment.Category == EntryCategory.DisableRecommended)} recommendations";
+        TotalCountLabel = _all.Count.ToString();
+        EnabledCountLabel = _all.Count(entry => entry.State == EntryState.Enabled).ToString();
+        RecommendationCountLabel = _all.Count(entry =>
+            entry.State == EntryState.Enabled
+            && entry.Assessment.Category == EntryCategory.DisableRecommended).ToString();
+        ProtectedCountLabel = _all.Count(entry => entry.IsProtected).ToString();
+        FilteredCountLabel = $"{Entries.Count} shown";
+        StatusMessage = $"{Entries.Count} shown of {_all.Count} entries · {RecommendationCountLabel} recommendations";
     }
 }

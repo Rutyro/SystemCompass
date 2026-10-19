@@ -32,6 +32,17 @@ public sealed class RedactionAndReportTests
     }
 
     [TestMethod]
+    public void ExtraLiteralCanBeAddedAtRuntime()
+    {
+        var redactor = new Redactor(new RedactionOptions());
+        redactor.AddLiteral("Contoso");
+
+        var redacted = redactor.Redact("Contoso project path");
+
+        Assert.AreEqual("<REDACTED> project path", redacted);
+    }
+
+    [TestMethod]
     public void DemoReportContainsNoSeedIdentifiers()
     {
         var now = new DateTimeOffset(2026, 1, 1, 12, 0, 0, TimeSpan.Zero);

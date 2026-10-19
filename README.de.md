@@ -4,7 +4,7 @@
 
 SystemCompass erfasst die Autostart-Mechanismen, die Windows tatsächlich bereitstellt, erklärt jeden Eintrag und ändert den Zustand ausschließlich über unterstützte Windows-Schnittstellen. Ein Schalter gilt erst dann als umgestellt, wenn der Zustand erneut aus dem System gelesen wurde. Alle Änderungen werden in einem fortlaufenden Journal festgehalten und können zurückgerollt werden.
 
-![Startup-Analyse](docs/screenshots/startup.png)
+![SystemCompass-Übersicht](docs/screenshots/overview.png)
 
 ## Funktionen
 
@@ -21,6 +21,7 @@ SystemCompass erfasst die Autostart-Mechanismen, die Windows tatsächlich bereit
 | Berichte | Redigierte Markdown-/JSON-Berichte mit Diagnose, Autostart-Zusammenfassung und einem einzelnen Boot-Messwert |
 | Demo-Modus | Fiktive Daten für Screenshots und Tests ohne Zugriff auf den Rechner |
 | CLI | Skriptfähige Befehle `audit`, `report`, `disable`, `enable`, `rollback`, `tweak`, `data` mit JSON-Ausgabe |
+| Desktop-UI | WPF mit AvalonDock-Docking, Extended-WPF-Toolkit-Steuerelementen und abhängigkeitsfreien Diagrammen; sechs Dokumente, gespeicherte Layouts und Demo-Modus |
 
 ## Sicherheitsmodell
 
@@ -103,7 +104,7 @@ flowchart LR
 
     subgraph Clients
         CLI[syscompass.exe]
-        APP[WinUI-3-App]
+        APP[WPF-App]
     end
 
     CLI --> Windows
@@ -150,7 +151,7 @@ Weitere: [docs/known-limitations.md](docs/known-limitations.md).
 src/SystemCompass.Core      plattformneutral: Modelle, Regeln, Journal, Tweak-Engine, Redigierung
 src/SystemCompass.Windows   Registry, Aufgabenplanung, SCM, Signatur, Diagnose
 src/SystemCompass.Cli       syscompass.exe
-src/SystemCompass.App       WinUI-3-Desktop-App
+src/SystemCompass.App       WPF-Desktop-App (AvalonDock, Extended WPF Toolkit)
 tests/SystemCompass.Tests   MSTest-Unit- und schreibgeschützte Integrationstests
 docs/                       Architektur, Sicherheitsmodell, Roadmap, Beispielbericht
 .github/                    CI-, Security-, Dokumentations- und Release-Workflows

@@ -2,38 +2,232 @@
     x:Class="SystemCompass.App.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="SystemCompass">
+    xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
+    xmlns:avalonThemes="clr-namespace:AvalonDock.Themes;assembly=AvalonDock.Themes.VS2013"
+    xmlns:views="clr-namespace:SystemCompass.App.Views"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Title="SystemCompass"
+    Width="1440"
+    Height="920"
+    WindowStartupLocation="CenterScreen">
 
-    <NavigationView
-        x:Name="Nav"
-        PaneDisplayMode="Left"
-        IsBackButtonVisible="Collapsed"
-        IsSettingsVisible="False"
-        SelectionChanged="OnSelectionChanged">
+    <Window.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+    </Window.InputBindings>
 
-        <NavigationView.MenuItems>
-            <NavigationViewItem Content="Startup" Tag="startup">
-                <NavigationViewItem.Icon>
-                    <FontIcon Glyph="&#xE7B8;" />
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem Content="Control Center" Tag="tweaks">
-                <NavigationViewItem.Icon>
-                    <FontIcon Glyph="&#xE713;" />
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem Content="Report" Tag="report">
-                <NavigationViewItem.Icon>
-                    <FontIcon Glyph="&#xE9D9;" />
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem Content="Journal" Tag="journal">
-                <NavigationViewItem.Icon>
-                    <FontIcon Glyph="&#xE81C;" />
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-        </NavigationView.MenuItems>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-        <Frame x:Name="ContentFrame" />
-    </NavigationView>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="Refresh audit" Command="{Binding RefreshCommand}" InputGestureText="F5" />
+                <MenuItem Header="Export report" Click="OnExport" InputGestureText="Ctrl+E" />
+                <Separator />
+                <MenuItem Header="_Settings" Click="OnSettings" />
+                <Separator />
+                <MenuItem Header="_Exit" Click="OnExit" />
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="Overview" Tag="overview" Click="OnShowDocument" />
+                <MenuItem Header="Startup" Tag="startup" Click="OnShowDocument" />
+                <MenuItem Header="Control Center" Tag="tweaks" Click="OnShowDocument" />
+                <MenuItem Header="Startup map" Tag="map" Click="OnShowDocument" />
+                <MenuItem Header="Report" Tag="report" Click="OnShowDocument" />
+                <MenuItem Header="Journal" Tag="journal" Click="OnShowDocument" />
+                <Separator />
+                <MenuItem Header="Explorer pane" Click="OnToggleExplorer" />
+                <MenuItem Header="Properties pane" Click="OnToggleProperties" />
+                <MenuItem Header="Bottom pane" Click="OnToggleBottom" />
+            </MenuItem>
+            <MenuItem Header="_Audit">
+                <MenuItem Header="_Guided cleanup" Click="OnGuidedCleanup" />
+                <MenuItem Header="Refresh all" Command="{Binding RefreshCommand}" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="About SystemCompass" Click="OnAbout" />
+            </MenuItem>
+        </Menu>
+
+        <ToolBarTray Grid.Row="1" IsLocked="True">
+            <ToolBar>
+                <Button Content="Refresh" Command="{Binding RefreshCommand}" Padding="10,4" Style="{StaticResource SoftButton}" />
+                <Button Content="Guided cleanup" Click="OnGuidedCleanup" Padding="10,4" Margin="5,0,0,0" Style="{StaticResource SoftButton}" />
+                <Separator />
+                <xctk:SplitButton Content="Export" Click="OnExport" Padding="10,4">
+                    <xctk:SplitButton.DropDownContent>
+                        <StackPanel>
+                            <Button Content="Save Markdown..." Click="OnExport" HorizontalContentAlignment="Left" />
+                            <Button Content="Copy to clipboard" Click="OnCopyReport" HorizontalContentAlignment="Left" />
+                            <Button Content="Print..." Click="OnPrintReport" HorizontalContentAlignment="Left" />
+                        </StackPanel>
+                    </xctk:SplitButton.DropDownContent>
+                </xctk:SplitButton>
+                <xctk:DropDownButton Content="Layout" Padding="10,4" Margin="5,0,0,0">
+                    <xctk:DropDownButton.DropDownContent>
+                        <StackPanel>
+                            <Button Content="Reset layout" Click="OnResetLayout" HorizontalContentAlignment="Left" />
+                            <Button Content="Save layout" Click="OnSaveLayout" HorizontalContentAlignment="Left" />
+                        </StackPanel>
+                    </xctk:DropDownButton.DropDownContent>
+                </xctk:DropDownButton>
+                <Separator />
+                <ToggleButton x:Name="DetailsToggle" Content="Details" IsChecked="True" Checked="OnToggleDetails"
+                              Unchecked="OnToggleDetails" Padding="10,4" Background="{StaticResource SubtleBrush}" />
+            </ToolBar>
+        </ToolBarTray>
+
+        <avalonDock:DockingManager x:Name="DockManager" Grid.Row="2">
+            <avalonDock:DockingManager.Theme>
+                <avalonThemes:Vs2013DarkTheme />
+            </avalonDock:DockingManager.Theme>
+            <avalonDock:LayoutRoot>
+                <avalonDock:LayoutPanel Orientation="Vertical">
+                    <avalonDock:LayoutPanel Orientation="Horizontal">
+                        <avalonDock:LayoutAnchorablePane DockWidth="250">
+                            <avalonDock:LayoutAnchorable Title="Explorer" ContentId="explorer"
+                                                        CanClose="False" CanHide="True">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Top" Text="STARTUP AND CATALOG" Style="{StaticResource Faint}"
+                                               Margin="8,8,8,4" />
+                                    <TreeView x:Name="ExplorerTree" ItemsSource="{Binding ExplorerRoots}"
+                                              SelectedItemChanged="OnExplorerSelected" Background="Transparent"
+                                              BorderThickness="0">
+                                        <TreeView.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                                            </HierarchicalDataTemplate>
+                                        </TreeView.ItemTemplate>
+                                    </TreeView>
+                                </DockPanel>
+                            </avalonDock:LayoutAnchorable>
+                        </avalonDock:LayoutAnchorablePane>
+
+                        <avalonDock:LayoutDocumentPane>
+                            <avalonDock:LayoutDocument Title="Overview" ContentId="overview" CanClose="False">
+                                <views:OverviewView DataContext="{Binding Dashboard}" />
+                            </avalonDock:LayoutDocument>
+                            <avalonDock:LayoutDocument Title="Startup" ContentId="startup" CanClose="False">
+                                <views:StartupView DataContext="{Binding Startup}" />
+                            </avalonDock:LayoutDocument>
+                            <avalonDock:LayoutDocument Title="Control Center" ContentId="tweaks" CanClose="False">
+                                <views:ControlCenterView DataContext="{Binding ControlCenter}" />
+                            </avalonDock:LayoutDocument>
+                            <avalonDock:LayoutDocument Title="Startup map" ContentId="map" CanClose="False">
+                                <views:StartupMapView DataContext="{Binding Startup}" />
+                            </avalonDock:LayoutDocument>
+                            <avalonDock:LayoutDocument Title="Report" ContentId="report" CanClose="False">
+                                <views:ReportView DataContext="{Binding Report}" />
+                            </avalonDock:LayoutDocument>
+                            <avalonDock:LayoutDocument Title="Journal" ContentId="journal" CanClose="False">
+                                <views:JournalView DataContext="{Binding Journal}" />
+                            </avalonDock:LayoutDocument>
+                        </avalonDock:LayoutDocumentPane>
+
+                        <avalonDock:LayoutAnchorablePane DockWidth="320">
+                            <avalonDock:LayoutAnchorable Title="Properties" ContentId="properties"
+                                                        CanClose="False" CanHide="True">
+                                <DockPanel Background="{StaticResource CardBrush}">
+                                    <TextBlock DockPanel.Dock="Top" Text="{Binding SelectedItemLabel}"
+                                               Style="{StaticResource Caption}" Margin="8,8,8,6" TextWrapping="Wrap" />
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                        <xctk:PropertyGrid SelectedObject="{Binding SelectedObject}"
+                                                           VerticalAlignment="Top"
+                                                           ShowSearchBox="False" ShowTitle="False"
+                                                           ShowSummary="False" ShowSortOptions="False"
+                                                           ShowPreview="False" ShowAdvancedOptions="False"
+                                                           AutoGenerateProperties="True" IsCategorized="True"
+                                                           Background="{StaticResource CardBrush}"
+                                                           Foreground="#E4E4E7" BorderThickness="0">
+                                            <xctk:PropertyGrid.Resources>
+                                                <Style TargetType="TextBox">
+                                                    <Setter Property="Background" Value="{StaticResource SubtleBrush}" />
+                                                    <Setter Property="Foreground" Value="#FAFAFA" />
+                                                    <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}" />
+                                                </Style>
+                                                <Style TargetType="ScrollViewer">
+                                                    <Setter Property="Background" Value="{StaticResource CardBrush}" />
+                                                    <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
+                                                </Style>
+                                                <Style TargetType="{x:Type xctk:PropertyGridEditorTextBox}">
+                                                    <Setter Property="Background" Value="{StaticResource SubtleBrush}" />
+                                                    <Setter Property="Foreground" Value="#FAFAFA" />
+                                                    <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}" />
+                                                </Style>
+                                            </xctk:PropertyGrid.Resources>
+                                            <xctk:PropertyGrid.PropertyContainerStyle>
+                                                <Style TargetType="{x:Type xctk:PropertyItem}">
+                                                    <Setter Property="Background" Value="{StaticResource CardBrush}" />
+                                                    <Setter Property="Foreground" Value="#E4E4E7" />
+                                                    <Setter Property="Padding" Value="4,2" />
+                                                </Style>
+                                            </xctk:PropertyGrid.PropertyContainerStyle>
+                                        </xctk:PropertyGrid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </avalonDock:LayoutAnchorable>
+                        </avalonDock:LayoutAnchorablePane>
+                    </avalonDock:LayoutPanel>
+
+                    <avalonDock:LayoutAnchorablePane DockHeight="190">
+                        <avalonDock:LayoutAnchorable Title="Operations preview" ContentId="operations"
+                                                    CanClose="False" CanHide="True">
+                            <ListBox ItemsSource="{Binding SelectedOperations}" Background="Transparent"
+                                     BorderThickness="0" Padding="6" />
+                        </avalonDock:LayoutAnchorable>
+                        <avalonDock:LayoutAnchorable Title="Activity log" ContentId="activity"
+                                                    CanClose="False" CanHide="True">
+                            <DockPanel>
+                                <RepeatButton DockPanel.Dock="Bottom" Content="Scroll to latest"
+                                              Click="OnScrollActivity" Margin="6" Padding="8,3" />
+                                <ListBox x:Name="ActivityList" ItemsSource="{Binding ActivityLog}"
+                                         Background="Transparent" BorderThickness="0" Padding="6"
+                                         FontFamily="Cascadia Mono, Consolas" FontSize="11" />
+                            </DockPanel>
+                        </avalonDock:LayoutAnchorable>
+                        <avalonDock:LayoutAnchorable Title="Recent changes" ContentId="timeline"
+                                                    CanClose="False" CanHide="True">
+                            <ListBox ItemsSource="{Binding Timeline}" Background="Transparent" BorderThickness="0" Padding="6">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Ellipse Width="7" Height="7" Fill="{Binding StatusBrush}"
+                                                     VerticalAlignment="Center" Margin="0,0,7,0" />
+                                            <TextBlock Grid.Column="1" Text="{Binding EntryName}" Style="{StaticResource Caption}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Grid.Column="2" Text="{Binding StatusLabel}" Style="{StaticResource Caption}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </avalonDock:LayoutAnchorable>
+                    </avalonDock:LayoutAnchorablePane>
+                </avalonDock:LayoutPanel>
+            </avalonDock:LayoutRoot>
+        </avalonDock:DockingManager>
+
+        <StatusBar Grid.Row="3">
+            <StatusBarItem HorizontalContentAlignment="Stretch">
+                <TextBlock Text="{Binding StatusMessage}" TextTrimming="CharacterEllipsis" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding ElevationLabel}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding CatalogStatus}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="v0.1.0" />
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
 </Window>

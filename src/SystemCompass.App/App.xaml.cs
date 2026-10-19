@@ -1,37 +1,45 @@
-using Microsoft.UI.Xaml;
+using System.Windows;
 using SystemCompass.Windows;
 
 namespace SystemCompass.App;
 
 public partial class App : Application
 {
-    private Window? _window;
-
     public App()
     {
-        InitializeComponent();
         var arguments = Environment.GetCommandLineArgs();
         IsDemo = arguments.Any(argument => argument.Equals("--demo", StringComparison.OrdinalIgnoreCase));
         StartPage = arguments.FirstOrDefault(argument =>
                 argument.StartsWith("--page=", StringComparison.OrdinalIgnoreCase))
             ?["--page=".Length..];
+        ScreenshotPath = arguments.FirstOrDefault(argument =>
+                argument.StartsWith("--screenshot=", StringComparison.OrdinalIgnoreCase))
+            ?["--screenshot=".Length..];
+        ScreenshotDialog = arguments.FirstOrDefault(argument =>
+                argument.StartsWith("--dialog=", StringComparison.OrdinalIgnoreCase))
+            ?["--dialog=".Length..];
         Services = SystemServices.Create();
     }
 
     public static SystemServices Services { get; private set; } = null!;
 
-    /// <summary>
-    /// Demo mode shows fictional startup entries and a fictional report so
-    /// screenshots never contain data from a real machine.
-    /// </summary>
+    /// <summary>Demo mode uses fictional data, never a real machine.</summary>
     public static bool IsDemo { get; private set; }
 
-    /// <summary>Optional navigation target used for demo screenshots.</summary>
     public static string? StartPage { get; private set; }
 
-    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    public static string? ScreenshotPath { get; private set; }
+
+    /// <summary>With --screenshot, opens a dialog instead of only the main window.</summary>
+    public static string? ScreenshotDialog { get; private set; }
+
+    public static MainWindow? Window { get; private set; }
+
+    protected override void OnStartup(StartupEventArgs e)
     {
-        _window = new MainWindow();
-        _window.Activate();
+        base.OnStartup(e);
+        Window = new MainWindow();
+        MainWindow = Window;
+        Window.Show();
     }
 }

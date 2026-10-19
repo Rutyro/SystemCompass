@@ -4,7 +4,7 @@
 
 SystemCompass inventories the startup mechanisms Windows actually exposes, explains what each entry is, and changes state only through supported Windows facilities. A toggle counts as applied only after the state is read back from the system. Everything is recorded in an append-only journal and can be rolled back.
 
-![Startup audit](docs/screenshots/startup.png)
+![SystemCompass overview](docs/screenshots/overview.png)
 
 ## What it does
 
@@ -21,6 +21,7 @@ SystemCompass inventories the startup mechanisms Windows actually exposes, expla
 | Reports | Redacted Markdown/JSON with diagnostics, startup summary and a single boot-duration sample |
 | Demo mode | Fictional data for screenshots and evaluation without touching the machine |
 | CLI | Scriptable `audit`, `report`, `disable`, `enable`, `rollback`, `tweak`, `data` commands with JSON output |
+| Desktop UI | WPF with AvalonDock docking, Extended WPF Toolkit controls and dependency-free charts; six documents, saved layouts and demo mode |
 
 ## Safety model
 
@@ -110,7 +111,7 @@ flowchart LR
 
     subgraph Clients
         CLI[syscompass.exe]
-        APP[WinUI 3 app]
+        APP[WPF app]
     end
 
     CLI --> Windows
@@ -157,7 +158,7 @@ See [docs/known-limitations.md](docs/known-limitations.md).
 src/SystemCompass.Core      platform-neutral models, rules, journal, tweak engine, redaction
 src/SystemCompass.Windows   registry, scheduler, SCM, signature and diagnostics providers
 src/SystemCompass.Cli       syscompass.exe
-src/SystemCompass.App       WinUI 3 desktop app
+src/SystemCompass.App       WPF desktop app (AvalonDock, Extended WPF Toolkit)
 tests/SystemCompass.Tests   MSTest unit and read-only integration tests
 docs/                       architecture, security model, roadmap, sample report
 .github/                    CI, security, documentation and release workflows

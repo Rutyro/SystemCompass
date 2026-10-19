@@ -1,0 +1,156 @@
+<UserControl
+    x:Class="SystemCompass.App.Views.JournalView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:controls="clr-namespace:SystemCompass.App.Controls">
+
+    <Grid Margin="22,18,22,18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Journal" Style="{StaticResource PageTitle}" />
+            <TextBlock Text="Append-only record of every change. A verified change can be rolled back to the state recorded before it was applied."
+                       Style="{StaticResource Caption}" Margin="0,3,0,0" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Padding="16,12" Margin="0,12,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="300" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Style="{StaticResource ChipBorder}" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="8" Height="8" Fill="{StaticResource AccentGreenBrush}" Margin="0,0,6,0" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding VerifiedCountLabel}" FontWeight="SemiBold" Margin="0,0,4,0" />
+                            <TextBlock Text="verified" Style="{StaticResource Caption}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource ChipBorder}" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="8" Height="8" Fill="{StaticResource AccentRedBrush}" Margin="0,0,6,0" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding FailedCountLabel}" FontWeight="SemiBold" Margin="0,0,4,0" />
+                            <TextBlock Text="failed" Style="{StaticResource Caption}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource ChipBorder}">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="8" Height="8" Fill="#94A3B8" Margin="0,0,6,0" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding RollbackCountLabel}" FontWeight="SemiBold" Margin="0,0,4,0" />
+                            <TextBlock Text="rolled back" Style="{StaticResource Caption}" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="18,0" VerticalAlignment="Center">
+                    <TextBlock Text="Change activity" Style="{StaticResource SectionTitle}" />
+                    <TextBlock Text="{Binding ActivitySummary}" Style="{StaticResource Caption}" />
+                </StackPanel>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <controls:BarSparkline
+                                           Height="42" Values="{Binding ActivityValues}"
+                                           BarBrush="{StaticResource AccentBlueBrush}" />
+                    <Grid Grid.Row="1" Margin="0,3,0,0">
+                        <TextBlock Text="{Binding ActivityRange}" Style="{StaticResource Faint}" />
+                        <TextBlock Text="Today" Style="{StaticResource Faint}" HorizontalAlignment="Right" />
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2" Margin="0,10,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Since" Style="{StaticResource Caption}" VerticalAlignment="Center" Margin="0,0,6,0" />
+            <DatePicker Grid.Column="1" SelectedDate="{Binding SinceDate}" Width="160" />
+            <TextBlock Grid.Column="2" Text="Select a day in the calendar to narrow the list."
+                       Style="{StaticResource Faint}" VerticalAlignment="Center" Margin="14,0,0,0" />
+            <Button Grid.Column="4" Content="Clear dates" Command="{Binding ClearDatesCommand}" Margin="8,0,0,0" Style="{StaticResource SoftButton}" />
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="265" />
+            </Grid.ColumnDefinitions>
+
+            <TabControl Grid.Column="0" Margin="0,0,10,0">
+                <TabItem Header="List">
+                    <ListView ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
+                              Background="Transparent" BorderThickness="0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Time" Width="130" DisplayMemberBinding="{Binding TimeLabel}" />
+                                <GridViewColumn Header="Entry" Width="155" DisplayMemberBinding="{Binding EntryName}" />
+                                <GridViewColumn Header="Action" Width="60" DisplayMemberBinding="{Binding ActionLabel}" />
+                                <GridViewColumn Header="Status" Width="70" DisplayMemberBinding="{Binding StatusLabel}" />
+                                <GridViewColumn Header="" Width="80">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Roll back" IsEnabled="{Binding CanRollback}"
+                                                    Click="OnRollbackClick" Padding="8,2" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </TabItem>
+                <TabItem Header="Timeline">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <xctk:TimelinePanel x:Name="TimelineHost" Height="250" Margin="10"
+                                            Orientation="Horizontal" BeginDate="{Binding TimelineBegin}"
+                                            EndDate="{Binding TimelineEnd}" UnitSize="18" UnitTimeSpan="12:00:00" />
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <GroupBox Header="Jump to a day">
+                    <Calendar SelectedDate="{Binding SelectedDay}" DisplayDate="{Binding TimelineBegin}" />
+                </GroupBox>
+                <GroupBox Header="Selected change">
+                    <StackPanel>
+                        <TextBlock Text="{Binding SelectedRow.EntryName}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding SelectedRow.TimeLabel}" Style="{StaticResource Faint}" Margin="0,2,0,8" />
+                        <TextBlock Text="Before" Style="{StaticResource Faint}" />
+                        <xctk:AutoSelectTextBox Text="{Binding SelectedRow.Before, Mode=OneWay}" IsReadOnly="True"
+                                                 Background="{StaticResource SubtleBrush}" Margin="0,2,0,6" />
+                        <TextBlock Text="After" Style="{StaticResource Faint}" />
+                        <xctk:AutoSelectTextBox Text="{Binding SelectedRow.After, Mode=OneWay}" IsReadOnly="True"
+                                                 Background="{StaticResource SubtleBrush}" Margin="0,2,0,6" />
+                        <TextBlock Text="{Binding SelectedRow.Error}" Foreground="{StaticResource AccentRedBrush}"
+                                   TextWrapping="Wrap" />
+                        <Button Content="Roll back selected" IsEnabled="{Binding SelectedRow.CanRollback}"
+                                Click="OnRollbackSelected" Margin="0,8,0,0" Style="{StaticResource SoftButton}" />
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            </ScrollViewer>
+
+            <TextBlock Text="No changes recorded yet. Apply a tweak or toggle a startup entry to start the journal."
+                       Style="{StaticResource Caption}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       TextWrapping="Wrap" MaxWidth="380" Visibility="{Binding EmptyVisibility}" />
+        </Grid>
+
+        <TextBlock Grid.Row="4" Text="{Binding StatusMessage}" Style="{StaticResource Caption}" Margin="0,8,0,0" />
+    </Grid>
+</UserControl>

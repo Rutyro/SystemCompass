@@ -4,7 +4,7 @@
 
 - Windows 10 1809 or later (x64 or ARM64)
 - .NET SDK **10.0.300** (pinned in `global.json`, `rollForward: latestFeature`)
-- No Visual Studio installation is required; the WinUI 3 XAML compiler is supplied by the Windows App SDK package
+- No Visual Studio installation is required; the WPF XAML compiler ships with the .NET SDK
 - No network access is required at application runtime
 
 ## Restore, build, test
@@ -72,7 +72,7 @@ SHA256SUMS.txt             checksums
 
 ## Reproducibility
 
-Builds are deterministic (`Deterministic=true`) but not guaranteed to be bit-identical across machines: the Windows App SDK, runtime and XAML compiler may embed environment-dependent metadata. Verify releases by checksum and provenance attestation rather than by rebuilding byte-for-byte.
+Builds are deterministic (`Deterministic=true`) but not guaranteed to be bit-identical across machines: the .NET SDK, WPF XAML compiler and linker may embed environment-dependent metadata. Verify releases by checksum and provenance attestation rather than by rebuilding byte-for-byte.
 
 ## Troubleshooting
 

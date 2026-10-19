@@ -8,6 +8,7 @@ The format follows Keep a Changelog, and the project adheres to Semantic Version
 
 ### Added
 
+- WPF desktop shell built on AvalonDock 5 and the Ms-PL Extended WPF Toolkit fork: six dockable documents, saved layouts, dark theme, dependency-free charts, report notes/print, guided-cleanup wizard and demo screenshots.
 - `tcpGlobal` operation for allow-listed `netsh int tcp set global` values.
 - `scheduledTask` operation for deny-listed scheduled-task state changes.
 - 32 additional curated tweaks migrated from the author's own scripts, including search/privacy policies, diagnostic tasks, TCP/AFD settings, power timers and per-effect visual overrides. Catalog total: 64.
@@ -15,6 +16,7 @@ The format follows Keep a Changelog, and the project adheres to Semantic Version
 
 ### Changed
 
+- The WinUI 3 shell was replaced by WPF; Windows App SDK and MSIX build dependencies were removed.
 - The security deny-list now also rejects UAC, SmartScreen, phishing-filter, telemetry-reporting and network-hardening values.
 
 ## [0.1.0] - 2026-10-19
