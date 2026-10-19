@@ -77,9 +77,9 @@
             </Grid.ColumnDefinitions>
             <xctk:WatermarkTextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" MinWidth="180"
                                    Watermark="Search title, category or id" Padding="7,5" />
-            <ComboBox Grid.Column="1" ItemsSource="{Binding Categories}" SelectedIndex="{Binding CategoryFilterIndex}"
+            <ComboBox Grid.Column="1" ItemsSource="{Binding Categories}" SelectedIndex="{Binding CategoryFilterIndex, Mode=TwoWay}"
                       Margin="8,0,0,0" />
-            <ComboBox Grid.Column="2" ItemsSource="{Binding StatusOptions}" SelectedIndex="{Binding StatusFilterIndex}"
+            <ComboBox Grid.Column="2" ItemsSource="{Binding StatusOptions}" SelectedIndex="{Binding StatusFilterIndex, Mode=TwoWay}"
                       Margin="8,0,0,0" />
             <xctk:CheckComboBox Grid.Column="3" ItemsSource="{Binding RiskOptions}" SelectedItemsOverride="{Binding RiskFilters}"
                                 Margin="8,0,0,0" />

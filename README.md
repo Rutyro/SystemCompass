@@ -23,6 +23,24 @@ SystemCompass inventories the startup mechanisms Windows actually exposes, expla
 | CLI | Scriptable `audit`, `report`, `disable`, `enable`, `rollback`, `tweak`, `data` commands with JSON output |
 | Desktop UI | WPF with AvalonDock docking, Extended WPF Toolkit controls and dependency-free charts; six documents, saved layouts and demo mode |
 
+## Screenshots
+
+| Startup | Control Center |
+|---|---|
+| ![Startup entries](docs/screenshots/startup.png) | ![Control Center](docs/screenshots/tweaks.png) |
+
+| Startup map | Report |
+|---|---|
+| ![Startup map](docs/screenshots/map.png) | ![Redacted report](docs/screenshots/report.png) |
+
+| Journal | Settings |
+|---|---|
+| ![Journal](docs/screenshots/journal.png) | ![Settings](docs/screenshots/settings.png) |
+
+| Guided cleanup |
+|---|
+| ![Guided cleanup wizard](docs/screenshots/guided-cleanup.png) |
+
 ## Safety model
 
 - **Audit never changes anything.** The default run collects and classifies.

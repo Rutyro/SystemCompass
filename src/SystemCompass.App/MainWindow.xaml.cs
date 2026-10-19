@@ -56,7 +56,10 @@ public partial class MainWindow : Window
             DeserializeLayout(DefaultLayoutPath);
         }
 
-        ViewModel.Log("Layout reset to the default.");
+        if (string.IsNullOrWhiteSpace(App.ScreenshotPath))
+        {
+            ViewModel.Log("Layout reset to the default.");
+        }
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -74,6 +77,12 @@ public partial class MainWindow : Window
         }
 
         _layoutReady = true;
+        if (!string.IsNullOrWhiteSpace(App.ScreenshotPath))
+        {
+            // Screenshots must not depend on the operator's saved layout.
+            ResetLayout();
+        }
+
         ShowDocument(App.StartPage ?? "overview");
 
         if (!string.IsNullOrWhiteSpace(App.ScreenshotPath))
@@ -87,7 +96,7 @@ public partial class MainWindow : Window
             dialog?.Show();
             var target = dialog ?? (Window)this;
 
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(App.ScreenshotDelay) };
             timer.Tick += (_, _) =>
             {
                 timer.Stop();
@@ -100,7 +109,7 @@ public partial class MainWindow : Window
 
     private void OnClosing(object? sender, CancelEventArgs e)
     {
-        if (_layoutReady)
+        if (_layoutReady && string.IsNullOrWhiteSpace(App.ScreenshotPath))
         {
             SaveLayout(LayoutPath);
         }
@@ -207,7 +216,31 @@ public partial class MainWindow : Window
         if (e.NewValue is ExplorerNode node)
         {
             ViewModel.SelectedExplorerNode = node;
+            if (sender is TreeView tree
+                && FindContainer(tree, node) is { HasItems: true } item)
+            {
+                item.IsExpanded = true;
+            }
         }
+    }
+
+    private static TreeViewItem? FindContainer(ItemsControl parent, object item)
+    {
+        if (parent.ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem match)
+        {
+            return match;
+        }
+
+        foreach (var child in parent.Items)
+        {
+            if (parent.ItemContainerGenerator.ContainerFromItem(child) is TreeViewItem container
+                && FindContainer(container, item) is { } found)
+            {
+                return found;
+            }
+        }
+
+        return null;
     }
 
     private void OnShowDocument(object sender, RoutedEventArgs e)

@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
@@ -30,6 +31,7 @@ public sealed partial class StartupEntryViewModel : ObservableObject
         CanToggle = canChange;
     }
 
+    [Browsable(false)]
     public StartupEntry Entry { get; }
 
     public string Id => Entry.Id;

@@ -18,6 +18,7 @@
         FinishButtonClosesWindow="True"
         CancelButtonContent="Cancel"
         CanCancel="True"
+        Help="OnHelp"
         Finish="OnFinish">
 
         <xctk:WizardPage

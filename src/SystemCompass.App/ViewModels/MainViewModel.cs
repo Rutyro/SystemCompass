@@ -72,6 +72,11 @@ public sealed partial class MainViewModel : ObservableObject
             case TweakItemViewModel tweak:
                 SelectTweak(tweak);
                 break;
+            default:
+                SelectedObject = null;
+                SelectedItemLabel = value?.Name ?? "Nothing selected";
+                SelectedOperations.Clear();
+                break;
         }
     }
 

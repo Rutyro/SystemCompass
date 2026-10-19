@@ -96,7 +96,7 @@
                                 </Border>
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="{Binding EnabledLabel}" Style="{StaticResource MetricValue}" />
-                                    <TextBlock Text="Enabled at startup" Style="{StaticResource Caption}" />
+                                    <TextBlock Text="Enabled at startup" Style="{StaticResource Caption}" TextWrapping="Wrap" />
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -110,7 +110,7 @@
                                 </Border>
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="{Binding RecommendationsLabel}" Style="{StaticResource MetricValue}" />
-                                    <TextBlock Text="Recommendations" Style="{StaticResource Caption}" />
+                                    <TextBlock Text="Recommendations" Style="{StaticResource Caption}" TextWrapping="Wrap" />
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -124,7 +124,7 @@
                                 </Border>
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="{Binding ProtectedLabel}" Style="{StaticResource MetricValue}" />
-                                    <TextBlock Text="Protected" Style="{StaticResource Caption}" />
+                                    <TextBlock Text="Protected" Style="{StaticResource Caption}" TextWrapping="Wrap" />
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -138,7 +138,7 @@
                                 </Border>
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="{Binding CatalogLabel}" Style="{StaticResource MetricValue}" />
-                                    <TextBlock Text="Curated tweaks" Style="{StaticResource Caption}" />
+                                    <TextBlock Text="Curated tweaks" Style="{StaticResource Caption}" TextWrapping="Wrap" />
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>

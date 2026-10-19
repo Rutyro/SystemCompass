@@ -14,6 +14,12 @@ The format follows Keep a Changelog, and the project adheres to Semantic Version
 - 32 additional curated tweaks migrated from the author's own scripts, including search/privacy policies, diagnostic tasks, TCP/AFD settings, power timers and per-effect visual overrides. Catalog total: 64.
 - Tests for TCP and scheduled-task round trips and for the extended deny-list.
 
+### Fixed
+
+- Dark-theme contrast for buttons, list and tree selection, combo boxes, property rows, check boxes, radio buttons and group boxes.
+- Toolbar spacing and a stray embedded scrollbar next to the Details toggle.
+- Guided cleanup now submits its Help event and populates demo candidates without allowing writes.
+
 ### Changed
 
 - The WinUI 3 shell was replaced by WPF; Windows App SDK and MSIX build dependencies were removed.

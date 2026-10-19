@@ -66,7 +66,7 @@
             </Grid.ColumnDefinitions>
             <xctk:WatermarkTextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                    Watermark="Search name, publisher or command" Padding="7,5" />
-            <ComboBox Grid.Column="1" SelectedIndex="{Binding FilterIndex}" Margin="8,0,0,0">
+            <ComboBox Grid.Column="1" SelectedIndex="{Binding FilterIndex, Mode=TwoWay}" Margin="8,0,0,0">
                 <ComboBoxItem Content="All categories" />
                 <ComboBoxItem Content="Disable recommended" />
                 <ComboBoxItem Content="Optional" />

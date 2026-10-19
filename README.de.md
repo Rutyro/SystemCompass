@@ -23,6 +23,24 @@ SystemCompass erfasst die Autostart-Mechanismen, die Windows tatsächlich bereit
 | CLI | Skriptfähige Befehle `audit`, `report`, `disable`, `enable`, `rollback`, `tweak`, `data` mit JSON-Ausgabe |
 | Desktop-UI | WPF mit AvalonDock-Docking, Extended-WPF-Toolkit-Steuerelementen und abhängigkeitsfreien Diagrammen; sechs Dokumente, gespeicherte Layouts und Demo-Modus |
 
+## Screenshots
+
+| Autostart | Control Center |
+|---|---|
+| ![Autostart-Einträge](docs/screenshots/startup.png) | ![Control Center](docs/screenshots/tweaks.png) |
+
+| Autostart-Karte | Bericht |
+|---|---|
+| ![Autostart-Karte](docs/screenshots/map.png) | ![Redigierter Bericht](docs/screenshots/report.png) |
+
+| Journal | Einstellungen |
+|---|---|
+| ![Journal](docs/screenshots/journal.png) | ![Einstellungen](docs/screenshots/settings.png) |
+
+| Geführte Bereinigung |
+|---|
+| ![Geführte Bereinigung](docs/screenshots/guided-cleanup.png) |
+
 ## Sicherheitsmodell
 
 - **Die Analyse ändert nichts.** Der Standardlauf sammelt und klassifiziert nur.

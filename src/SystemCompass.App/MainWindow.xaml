@@ -54,11 +54,11 @@
         </Menu>
 
         <ToolBarTray Grid.Row="1" IsLocked="True">
-            <ToolBar>
-                <Button Content="Refresh" Command="{Binding RefreshCommand}" Padding="10,4" Style="{StaticResource SoftButton}" />
-                <Button Content="Guided cleanup" Click="OnGuidedCleanup" Padding="10,4" Margin="5,0,0,0" Style="{StaticResource SoftButton}" />
+            <ToolBar MinHeight="38" Padding="4,2">
+                <Button Content="Refresh" Command="{Binding RefreshCommand}" Padding="10,4" Margin="0,0,6,0" Style="{StaticResource SoftButton}" />
+                <Button Content="Guided cleanup" Click="OnGuidedCleanup" Padding="10,4" Margin="0,0,6,0" Style="{StaticResource SoftButton}" />
                 <Separator />
-                <xctk:SplitButton Content="Export" Click="OnExport" Padding="10,4">
+                <xctk:SplitButton Content="Export" Click="OnExport" Padding="10,4" Margin="6,0,0,0">
                     <xctk:SplitButton.DropDownContent>
                         <StackPanel>
                             <Button Content="Save Markdown..." Click="OnExport" HorizontalContentAlignment="Left" />
@@ -67,7 +67,7 @@
                         </StackPanel>
                     </xctk:SplitButton.DropDownContent>
                 </xctk:SplitButton>
-                <xctk:DropDownButton Content="Layout" Padding="10,4" Margin="5,0,0,0">
+                <xctk:DropDownButton Content="Layout" Padding="10,4" Margin="6,0,0,0">
                     <xctk:DropDownButton.DropDownContent>
                         <StackPanel>
                             <Button Content="Reset layout" Click="OnResetLayout" HorizontalContentAlignment="Left" />
@@ -77,7 +77,7 @@
                 </xctk:DropDownButton>
                 <Separator />
                 <ToggleButton x:Name="DetailsToggle" Content="Details" IsChecked="True" Checked="OnToggleDetails"
-                              Unchecked="OnToggleDetails" Padding="10,4" Background="{StaticResource SubtleBrush}" />
+                              Unchecked="OnToggleDetails" Padding="10,4" Margin="6,0,0,0" Background="{StaticResource SubtleBrush}" />
             </ToolBar>
         </ToolBarTray>
 
@@ -134,9 +134,11 @@
                                 <DockPanel Background="{StaticResource CardBrush}">
                                     <TextBlock DockPanel.Dock="Top" Text="{Binding SelectedItemLabel}"
                                                Style="{StaticResource Caption}" Margin="8,8,8,6" TextWrapping="Wrap" />
-                                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                                  HorizontalContentAlignment="Stretch">
                                         <xctk:PropertyGrid SelectedObject="{Binding SelectedObject}"
                                                            VerticalAlignment="Top"
+                                                           FontSize="11" NameColumnWidth="135"
                                                            ShowSearchBox="False" ShowTitle="False"
                                                            ShowSummary="False" ShowSortOptions="False"
                                                            ShowPreview="False" ShowAdvancedOptions="False"
@@ -163,7 +165,47 @@
                                                 <Style TargetType="{x:Type xctk:PropertyItem}">
                                                     <Setter Property="Background" Value="{StaticResource CardBrush}" />
                                                     <Setter Property="Foreground" Value="#E4E4E7" />
-                                                    <Setter Property="Padding" Value="4,2" />
+                                                    <Setter Property="Padding" Value="6,4" />
+                                                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type xctk:PropertyItem}">
+                                                                <Border x:Name="Row"
+                                                                        Background="{TemplateBinding Background}"
+                                                                        BorderBrush="{StaticResource CardBorderBrush}"
+                                                                        BorderThickness="0,0,0,1"
+                                                                        Padding="{TemplateBinding Padding}"
+                                                                        SnapsToDevicePixels="True">
+                                                                    <Grid>
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType={x:Type xctk:PropertyGrid}}}" />
+                                                                            <ColumnDefinition Width="*" />
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <TextBlock Text="{Binding DisplayName, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                                   Foreground="{StaticResource MutedTextBrush}"
+                                                                                   TextTrimming="CharacterEllipsis"
+                                                                                   VerticalAlignment="Center" />
+                                                                        <Grid Grid.Column="1" Margin="6,0,0,0">
+                                                                            <TextBlock Text="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                                       ToolTip="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                                       Foreground="#FAFAFA"
+                                                                                       TextWrapping="Wrap"
+                                                                                       VerticalAlignment="Center" />
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="Row" Property="Background" Value="#2A2A34" />
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsSelected" Value="True">
+                                                                        <Setter TargetName="Row" Property="Background" Value="#1E3A5F" />
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
                                                 </Style>
                                             </xctk:PropertyGrid.PropertyContainerStyle>
                                         </xctk:PropertyGrid>

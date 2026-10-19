@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Windows;
 using SystemCompass.Windows;
 
@@ -18,6 +19,12 @@ public partial class App : Application
         ScreenshotDialog = arguments.FirstOrDefault(argument =>
                 argument.StartsWith("--dialog=", StringComparison.OrdinalIgnoreCase))
             ?["--dialog=".Length..];
+        ScreenshotDelay = arguments.FirstOrDefault(argument =>
+                argument.StartsWith("--screenshot-delay=", StringComparison.OrdinalIgnoreCase)) is { } delay
+            && double.TryParse(delay["--screenshot-delay=".Length..], NumberStyles.Float,
+                CultureInfo.InvariantCulture, out var seconds)
+                ? Math.Clamp(seconds, 0.5, 30)
+                : 1.5;
         Services = SystemServices.Create();
     }
 
@@ -32,6 +39,8 @@ public partial class App : Application
 
     /// <summary>With --screenshot, opens a dialog instead of only the main window.</summary>
     public static string? ScreenshotDialog { get; private set; }
+
+    public static double ScreenshotDelay { get; private set; }
 
     public static MainWindow? Window { get; private set; }
 
