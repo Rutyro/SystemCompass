@@ -10,6 +10,6 @@
     <PackageVersion Include="Dirkster.AvalonDock" Version="5.0.1" />
     <PackageVersion Include="Dirkster.AvalonDock.Themes.VS2013" Version="5.0.1" />
     <PackageVersion Include="Dirkster.AvalonDock.Serializer.Xml" Version="5.0.1" />
-    <PackageVersion Include="System.CommandLine" Version="2.0.13" />
+    <PackageVersion Include="System.CommandLine" Version="3.0.0" />
   </ItemGroup>
 </Project>
